@@ -1,7 +1,7 @@
 NAME = megaphone
 
 CPP = c++
-CPPFLAGS = -Wall -Wextra -std=c++98
+CPPFLAGS = -Wall -Wextra -std=c++11
 
 SOURCE = megaphone.cpp
 OBJECT = $(SOURCE:.cpp=.o)
