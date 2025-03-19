@@ -9,9 +9,9 @@ class PhoneBook
 {
 	private:
 		Contact Contacts[8];
-		int	count;
 		int	oldest;
 	public:
+		int count;
 		PhoneBook();
 		void addContact();
 		void searchContact();

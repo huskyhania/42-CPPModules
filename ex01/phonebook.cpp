@@ -1,16 +1,20 @@
 #include <iostream>
 #include <cctype>
 #include <string>
+#include <iomanip>
 #include "Contact.hpp"
 #include "Phonebook.hpp"
-#include <iomanip>
 
-std::string getInput(std::string prompt)
+std::string getInput(std::string prompt, int &flag)
 {
 	std::string	userInput;
 	std::cout << prompt << std::endl;
-	std::getline(std::cin, userInput);
-	std::cout << userInput << std::endl;
+	if (!std::getline(std::cin, userInput))
+	{
+		std::cout << "\nEOF detected while filling data\n";
+		flag = 1;
+		return "";
+	}
 	return (userInput); 
 }
 
@@ -22,11 +26,17 @@ PhoneBook::PhoneBook()
 
 void	PhoneBook::addContact(void)
 {
-	std::string first = getInput("Type first name: ");
-	std::string last = getInput("Type last name: ");
-	std::string nick = getInput("Type nickname: ");
-	std::string number = getInput("Type phone number: ");
-	std::string secret = getInput("Type darkest secret: ");
+	int flag = 0;
+	std::string first = getInput("Type first name: ", flag);
+	if (flag) return ;
+	std::string last = getInput("Type last name: ", flag);
+	if (flag) return ;
+	std::string nick = getInput("Type nickname: ", flag);
+	if (flag) return ;
+	std::string number = getInput("Type phone number: ", flag);
+	if (flag) return ;
+	std::string secret = getInput("Type darkest secret: ", flag);
+	if (flag) return ;
 	if (first.empty() || last.empty() || nick.empty() || number.empty() || secret.empty())
 	{
 		std::cout << "Fill all the fields" << std::endl;
@@ -35,8 +45,6 @@ void	PhoneBook::addContact(void)
 	else 
 	{
 		std::cout << "Contact added" << std::endl;
-		//test
-		std::cout << first << last << nick << number << std::endl;
 		Contact Contact(first, last, nick, number, secret);
 		if (count < 8)
 		{
@@ -58,19 +66,22 @@ std::string formatText(std::string text)
     return text;
 }
 
+void	Contact::printFull()
+{
+	std::cout << "First name: " << getFirstName() << std::endl;
+	std::cout << "Last name: " << getLastName() << std::endl;
+	std::cout << "Nickname: " << getNickname() << std::endl;
+	std::cout << "Phone  Number: " << getNumber() << std::endl;
+
+}
+
 void	PhoneBook::searchContact(void)
 {
-	if (count == 0)
-	{
-		std::cout << "Phonebook is empty\n";
-		return ;
-	}
 	std::cout << "Summary: \n";
 	std::cout << std::setw(10) << "Index" << "|";
 	std::cout << std::setw(10) << "First Name" << "|";
 	std::cout << std::setw(10) << "Last Name" << "|";
 	std::cout << std::setw(10) << "Nickname" << std::endl;
-
 
 	for (int i = 0; i < count; i++)
 	{
@@ -79,13 +90,15 @@ void	PhoneBook::searchContact(void)
 		<< std::setw(10) << formatText(Contacts[i].getLastName()) << "|"
 		<< std::setw(10) << formatText(Contacts[i].getNickname()) << std::endl;		
 	}
-	std::string searched =  getInput("Which index do you want to see?\n";)
-	if (searched.length != 1 || searched.at(0) >= count)
+	int flag = 0;
+	std::string searched =  getInput("Which index do you want to see?", flag);
+	if (flag) return ;
+	if (searched.length() == 1 && std::isdigit(searched[0]))
 	{
-		std::cout << "Invalid index\n";
-		return ;
+		int index = searched[0] - '0';
+		if (index < 1 || index > count)
+			std::cout << "Number out of range\n";
+		else
+			Contacts[index - 1].printFull();
 	}
-	else
-		Contacts[searched - 1].print_full();
-
 }

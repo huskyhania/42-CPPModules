@@ -18,7 +18,7 @@ class Contact
 		std::string	getFirstName() { return (firstName); }
 		std::string getLastName() { return (lastName); }
 		std::string getNickname() { return (nickName); }
-		std::string getNumber() { return (lastName); }
+		std::string getNumber() { return (phoneNumber); }
 		void printFull();
 };
 
