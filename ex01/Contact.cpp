@@ -1,33 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Phonebook.hpp                                      :+:      :+:    :+:   */
+/*   contact.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hskrzypi <hskrzypi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/20 10:01:18 by hskrzypi          #+#    #+#             */
-/*   Updated: 2025/03/20 10:01:22 by hskrzypi         ###   ########.fr       */
+/*   Created: 2025/03/20 09:59:45 by hskrzypi          #+#    #+#             */
+/*   Updated: 2025/03/20 09:59:51 by hskrzypi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#ifndef PHONEBOOK_HPP
-#define PHONEBOOK_HPP
 
 #include <iostream>
 #include <string>
 #include "Contact.hpp"
+#include "Phonebook.hpp"
 
-class PhoneBook
+Contact::Contact()
 {
-	private:
-		Contact Contacts[8];
-		int	oldest;
-	public:
-		int count;
-		PhoneBook();
-		~PhoneBook();
-		void addContact();
-		void searchContact();
-};
+	firstName = "";
+	lastName = "";
+	nickName = "";
+	phoneNumber = "";
+	darkestSecret = "";
+}
 
-#endif
+Contact::Contact(std::string name, std::string surname, std::string nick, std::string number, std::string secret)
+{
+	firstName = name;
+	lastName = surname;
+	nickName = nick;
+	phoneNumber = number;
+	darkestSecret = secret;
+}
+
+Contact::~Contact(){}

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Contact.hpp                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hskrzypi <hskrzypi@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/20 10:00:16 by hskrzypi          #+#    #+#             */
+/*   Updated: 2025/03/20 10:00:22 by hskrzypi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CONTACT_HPP
 #define CONTACT_HPP
 
@@ -19,7 +31,9 @@ class Contact
 		std::string getLastName() { return (lastName); }
 		std::string getNickname() { return (nickName); }
 		std::string getNumber() { return (phoneNumber); }
+		std::string getSecret() { return (darkestSecret); }
 		void printFull();
+		~Contact();
 };
 
 #endif

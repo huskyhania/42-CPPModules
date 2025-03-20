@@ -1,10 +1,10 @@
-NAME = phonebook
+NAME = Phonebook
 all: $(NAME)
 
 CPP := c++
 FLAGS := -Wall -Wextra -Werror -std=c++98
 
-SOURCE := main.cpp phonebook.cpp contact.cpp
+SOURCE := main.cpp Phonebook.cpp Contact.cpp
 OBJ := $(SOURCE:.cpp=.o)
 
 $(NAME) : $(OBJ)

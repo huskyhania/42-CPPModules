@@ -2,7 +2,7 @@ NAME = accounting
 all: $(NAME)
 
 CPP := c++
-FLAGS := -std=c++98
+FLAGS := -Wall -Wextra -Werror -std=c++98
 
 SOURCE := tests.cpp Account.cpp
 OBJ := $(SOURCE:.cpp=.o)
