@@ -12,16 +12,19 @@
 
 #ifndef HUMANB_HPP
 #define HUMANB_HPP
+#include <string>
+#include "Weapon.hpp"
 
 class HumanB
 {
 	private:
 		std::string _name;
+		Weapon& Weapon1;
 	public:
-		Weapon Weapon1;
 		void	attack();
-		HumanB();
-		~HumannB();
+		HumanB(std::string nameB);
+		HumanB(std::string nameB, Weapon& weaponB);
+		~HumanB();
 };
 
 #endif

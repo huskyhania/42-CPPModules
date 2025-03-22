@@ -12,15 +12,17 @@
 
 #ifndef HumanA_HPP
 #define HumanA_HPP
+#include <string>
+#include "Weapon.hpp"
 
 class HumanA
 {
 	private:
 		std::string _name;
+		Weapon& Weapon1;
 	public:
-		Weapon Weapon1;
 		void	attack();
-		HumanA();//should take a weapon in its contructor
+		HumanA(std::string nameA, Weapon& weaponA);//should take a weapon in its contructor
 		~HumanA();
 };
 
