@@ -18,5 +18,11 @@ int main()
 		club.setType("some other type of club");
 		jim.attack();
 	}
+	//test for nullptr
+	{
+		HumanB brian("Brian");
+		brian.attack();
+	}
+
 	return (0);
 }

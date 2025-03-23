@@ -22,8 +22,7 @@ class HumanA
 		Weapon& Weapon1;
 	public:
 		void	attack();
-		HumanA(std::string nameA, Weapon& weaponA);//should take a weapon in its contructor
-		~HumanA();
+		HumanA(std::string nameA, Weapon& weaponA);
 };
 
 #endif

@@ -4,13 +4,21 @@
 HumanB::HumanB(std::string nameB)
 {
 	_name = nameB;
+	_weapon1 = nullptr;
 }
 
-HumanB::HumanB(std::string nameB, Weapon& weaponB) : _name(nameB), Weapon1(weaponB){}
+void HumanB::setWeapon(Weapon &newWeapon)
+{
+	_weapon1 = &newWeapon;
+}
 
 void	HumanB::attack()
 {
-	std::cout << " attacks with their " << Weapon1.getType() << std::endl;
+	std::cout << _name << " attacks with their "; 
+	if (_weapon1 == nullptr)
+		std::cout << "best intentions";
+	else 
+		std::cout << _weapon1->getType() << std::endl;
 }
 
 HumanB::~HumanB(){}
