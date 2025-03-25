@@ -1,17 +1,18 @@
 NAME = apocalypse
 
 CPP = c++
-CPPFLAGS = -Wall -Wextra -std=c++98
+CPPFLAGS = -Wall -Wextra -Werror -std=c++98
 
 SOURCE = main.cpp Zombie.cpp randomChump.cpp newZombie.cpp
 OBJECT = $(SOURCE:.cpp=.o)
+HEADERS = Zombie.hpp
 
 all: $(NAME)
 
 $(NAME) : $(OBJECT)
 	$(CPP) $(FLAGS) $(OBJECT) -o $(NAME)
 
-%.o : %.cpp
+%.o : %.cpp $(HEADERS)
 	$(CPP) $(FLAGS) -c $< -o $@
 
 clean:

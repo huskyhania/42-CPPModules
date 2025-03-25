@@ -1,17 +1,18 @@
 NAME = Harl
 
 CPP = c++
-CPPFLAGS = -Wall -Wextra -std=c++11
+CPPFLAGS = -Wall -Wextra -Werror -std=c++11
 
 SOURCE = main.cpp Harl.cpp
 OBJECT = $(SOURCE:.cpp=.o)
+HEADERS = Harl.hpp
 
 all: $(NAME)
 
-$(NAME) : $(OBJECT)
+$(NAME) : $(OBJECT) 
 	$(CPP) $(FLAGS) $(OBJECT) -o $(NAME)
 
-%.o : %.cpp
+%.o : %.cpp $(HEADERS)
 	$(CPP) $(FLAGS) -c $< -o $@
 
 clean:

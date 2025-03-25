@@ -6,7 +6,7 @@
 /*   By: hskrzypi <hskrzypi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 21:57:59 by hskrzypi          #+#    #+#             */
-/*   Updated: 2025/03/21 22:21:25 by hskrzypi         ###   ########.fr       */
+/*   Updated: 2025/03/25 19:39:01 by hskrzypi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ Zombie* zombieHorde(int N, std::string name)
 		return (horde);
 	}
 	catch (std::bad_alloc& e){
-		std::cerr << "Memory allocation failed:" << std::endl;
+		std::cerr << "Memory allocation failed" << std::endl;
 		return nullptr;
 	}
 }

@@ -3,9 +3,11 @@
 
 int	main(void)
 {
-	Zombie *zmb = newZombie("Jared Heap Boi");
-	zmb->announce();
 	randomChump("Jay Stack Guy");
+	Zombie *zmb = newZombie("Jared Heap Boi");
+	if (!zmb)
+		return 1;
+	zmb->announce();
 	delete(zmb);
 	return (0);
 }

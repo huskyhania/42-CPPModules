@@ -6,7 +6,7 @@
 /*   By: hskrzypi <hskrzypi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 17:18:30 by hskrzypi          #+#    #+#             */
-/*   Updated: 2025/03/23 21:04:11 by hskrzypi         ###   ########.fr       */
+/*   Updated: 2025/03/25 17:57:25 by hskrzypi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 void search_and_replace(std::ifstream &inFile, std::string &s1, std::string &s2, std::ofstream &outFile)
 {
 	std::string line;
-	while (std::getline(inFile, line))
+	while (std::getline(inFile, line, '\0'))
 	{
 		size_t pos = 0;
 		while ((pos = line.find(s1, pos)) != std::string::npos)
@@ -39,9 +39,11 @@ int main(int argc, char *argv[])
 		std::string name = argv[1];
 		std::string searched = argv[2];
 		std::string replace = argv[3];
-		if (replace.length() == 0)
-			 std::cout << "Nothing to replace" << std::endl;
-
+		if (searched.length() == 0)
+		{
+			std::cout << "Nothing to replace" << std::endl;
+			return 1;
+		}
 		std::ifstream inFile;
 		inFile.open(name);
 		if (inFile.fail())
@@ -63,4 +65,3 @@ int main(int argc, char *argv[])
 	}
 	return 0;
 }
-

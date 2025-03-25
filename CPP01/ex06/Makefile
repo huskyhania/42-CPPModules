@@ -1,7 +1,7 @@
 NAME = harlFilter
 
 CPP = c++
-CPPFLAGS = -Wall -Wextra -std=c++11
+CPPFLAGS = -Wall -Wextra -Werror -std=c++11
 
 SOURCE = main.cpp Harl.cpp
 OBJECT = $(SOURCE:.cpp=.o)
