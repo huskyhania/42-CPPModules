@@ -3,6 +3,7 @@
 
 int main()
 {
+	//referene test
 	{
 		Weapon club = Weapon("crude spiked club");
 		HumanA bob("Bob", club);
@@ -10,6 +11,7 @@ int main()
 		club.setType("some other type of club");
 		bob.attack();
 	}
+	//pointer test
 	{
 		Weapon club = Weapon("crude spiked club");
 		HumanB jim("Jim");
@@ -22,7 +24,9 @@ int main()
 	{
 		HumanB brian("Brian");
 		brian.attack();
+		Weapon gun = Weapon("big ass gun");
+		brian.setWeapon(gun);
+		brian.attack();
 	}
-
 	return (0);
 }

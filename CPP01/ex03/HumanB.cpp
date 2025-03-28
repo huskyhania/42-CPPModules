@@ -16,7 +16,7 @@ void	HumanB::attack()
 {
 	std::cout << _name << " attacks with their "; 
 	if (_weapon1 == nullptr)
-		std::cout << "best intentions";
+		std::cout << "best intentions" << std::endl;
 	else 
 		std::cout << _weapon1->getType() << std::endl;
 }
