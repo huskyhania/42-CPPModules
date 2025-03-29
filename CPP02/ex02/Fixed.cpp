@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hskrzypi <hskrzypi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/28 20:57:20 by hskrzypi          #+#    #+#             */
-/*   Updated: 2025/03/29 15:37:54 by hskrzypi         ###   ########.fr       */
+/*   Created: 2025/03/29 18:21:16 by hskrzypi          #+#    #+#             */
+/*   Updated: 2025/03/29 22:00:11 by hskrzypi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,45 @@ Fixed& Fixed::operator=(const Fixed& initial)
 	}
 	return (*this);
 }
+
+//Comparison operators
+bool Fixed::operator > (const Fixed &num) const {return this->_value > num._value;}
+bool Fixed::operator < (const Fixed &num) const {return this->_value < num._value;}
+bool Fixed::operator >= (const Fixed &num) const {return this->_value >= num._value;}
+bool Fixed::operator <= (const Fixed &num) const {return this->_value <= num._value;}
+bool Fixed::operator == (const Fixed &num) const {return this->_value == num._value;}
+bool Fixed::operator != (const Fixed &num) const {return this->_value != num._value;}
+
+//Arithmetic operators
+
+Fixed Fixed::operator + (const Fixed &num) const {return Fixed(this->toFloat() + num.toFloat());}
+Fixed Fixed::operator - (const Fixed &num) const {return Fixed(this->toFloat() - num.toFloat());}
+Fixed Fixed::operator * (const Fixed &num) const {return Fixed(this->toFloat() * num.toFloat());}
+Fixed Fixed::operator / (const Fixed &num) const {return Fixed(this->toFloat() / num.toFloat());}
+
+//Increments
+Fixed& Fixed::operator ++ () {return (this->_value++, *this);}//pre (like ++i)
+Fixed& Fixed::operator -- () {return (this->_value--, *this);}//pre (like --i)
+
+Fixed Fixed::operator ++ (int) {
+	Fixed tmp(*this); 
+	this->_value++;	
+	return tmp;
+}
+
+Fixed Fixed::operator -- (int) {
+	Fixed tmp(*this); 
+	this->_value--;
+	return(tmp);
+}
+
+//allow modifications of returned objects
+Fixed		&Fixed::min(Fixed &num1, Fixed &num2) {return (num1 < num2) ? num1 : num2;}
+Fixed		&Fixed::max(Fixed &num1, Fixed &num2) {return (num1 > num2) ? num1 : num2;}
+
+//returned object cannot be modified
+const Fixed	&Fixed::min(const Fixed &num1, const Fixed &num2) {return (num1 < num2) ? num1 : num2;}
+const Fixed	&Fixed::max(const Fixed &num1, const Fixed &num2) {return (num1 > num2) ? num1 : num2;}
 
 int	Fixed::getRawBits( void ) const
 {
