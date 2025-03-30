@@ -6,7 +6,7 @@
 /*   By: hskrzypi <hskrzypi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 16:38:11 by hskrzypi          #+#    #+#             */
-/*   Updated: 2025/03/30 21:15:25 by hskrzypi         ###   ########.fr       */
+/*   Updated: 2025/03/30 21:22:15 by hskrzypi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,13 @@ int main(void)
 	Point fCheck(0.5, 1.5);
 	insideTriangle = bsp(fa, fb, fc, fCheck);
 	printResult(fCheck, insideTriangle);
+	
+	Point nullA(0.0, 0.0);
+	Point nullB(0.0, 0.0);
+	Point nullC(0.0, 0.0);
+	std::cout << "point a: " << nullA << " point b: " << nullB << " point c: " << nullC << std::endl;
+	Point nullPoint(0.0, 0.0);
+	insideTriangle = bsp(nullA, nullB, nullC, nullPoint);
+	printResult(nullPoint, insideTriangle);
 	return 0;
 }
