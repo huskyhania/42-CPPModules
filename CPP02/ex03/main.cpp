@@ -6,12 +6,14 @@
 /*   By: hskrzypi <hskrzypi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/30 16:38:11 by hskrzypi          #+#    #+#             */
-/*   Updated: 2025/03/30 20:58:29 by hskrzypi         ###   ########.fr       */
+/*   Updated: 2025/03/30 21:15:25 by hskrzypi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Point.hpp"
 #include <cmath>
+
+//same side test or half-plane test (using cross product)
 
 Fixed	calculateSign(const Point& a, const Point& b, const Point& c)
 {
@@ -75,5 +77,15 @@ int main(void)
 	insideTriangle = bsp(a, b, c, toCheck4);
  	printResult(toCheck4, insideTriangle);
 
+	Point toCheck5(10.1, 30.2);
+	insideTriangle = bsp(a, b, c, toCheck5);
+	printResult(toCheck5, insideTriangle);
+	
+	Point fa(0.5, 1.5);
+	Point fb(10.5, 30.5);
+	Point fc(20.5, 0.5);
+	Point fCheck(0.5, 1.5);
+	insideTriangle = bsp(fa, fb, fc, fCheck);
+	printResult(fCheck, insideTriangle);
 	return 0;
 }
