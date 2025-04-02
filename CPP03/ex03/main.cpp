@@ -6,12 +6,15 @@
 /*   By: hskrzypi <hskrzypi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 22:29:43 by hskrzypi          #+#    #+#             */
-/*   Updated: 2025/04/01 22:36:29 by hskrzypi         ###   ########.fr       */
+/*   Updated: 2025/04/02 22:08:02 by hskrzypi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ClapTrap.hpp"
 #include "ScavTrap.hpp"
+#include "FragTrap.hpp"
+
+#include "DiamondTrap.hpp"
 
 int	main(void)
 {
@@ -33,15 +36,14 @@ int	main(void)
 	Helmut.attack(Hans.getName());
 	Hans.takeDamage(10);*/
 	
-	ScavTrap Sven("Sven");
-	ScavTrap Sigmund("Sigmund");
-	std::cout << std::endl << std::endl << "--ScavTrap tests--" << std::endl << std::endl;
-	Sven.attack(Sigmund.getName());
-	Sigmund.takeDamage(20);
-	Sigmund.attack(Sven.getName());
+	DiamondTrap Dave("Dave");
+	DiamondTrap David("David");
+	std::cout << std::endl << std::endl << "--DiamondTrap tests--" << std::endl << std::endl;
+	Dave.attack(David.getName());
+	David.takeDamage(20);
+	David.attack(Dave.getName());
 
-	Sven.guardGate();
-	std::cout << std::endl;
-
+	David.whoAmI();
+	std::cout << std::endl << std::endl;
 	return (0);
 }

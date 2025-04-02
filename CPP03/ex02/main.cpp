@@ -12,6 +12,7 @@
 
 #include "ClapTrap.hpp"
 #include "ScavTrap.hpp"
+#include "FragTrap.hpp"
 
 int	main(void)
 {
@@ -41,7 +42,11 @@ int	main(void)
 	Sigmund.attack(Sven.getName());
 
 	Sven.guardGate();
-	std::cout << std::endl;
-
+	std::cout << std::endl << std::endl;
+	FragTrap Troy("Troy");
+	std::cout << std::endl << std::endl << "--FragTrap tests--" << std::endl << std::endl;
+	Troy.attack(Sven.getName());
+	Troy.highFivesGuys();
+	std::cout << std::endl << std::endl;
 	return (0);
 }

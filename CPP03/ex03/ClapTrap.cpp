@@ -2,23 +2,23 @@
 
 ClapTrap::ClapTrap() : name("No name"), hitPoints(10), energyPoints(10), attackDamage(0), maxHitPoints(10)
 {
-	std::cout << "default constructor called for " << name << std::endl << std::endl;
+	std::cout << "ClapTrap default constructor called for " << name << std::endl << std::endl;
 }
 
 ClapTrap::ClapTrap(std::string name) : name(name), hitPoints(10), energyPoints(10), attackDamage(0), maxHitPoints(10)
 {
-	std::cout << std::endl << "parameter constructor called for " << name << std::endl;
+	std::cout << std::endl << "ClapTrap parameter constructor called for " << name << std::endl;
 }
 
 ClapTrap::ClapTrap(const ClapTrap &original) : name(original.name), hitPoints(original.hitPoints), energyPoints(original.energyPoints),
 	attackDamage(original.attackDamage), maxHitPoints(original.maxHitPoints)
 {
-	std::cout << std::endl << "copy constructor called for " << name << std::endl << std::endl;
+	std::cout << std::endl << "ClapTrap copy constructor called for " << name << std::endl << std::endl;
 }
 
 ClapTrap &ClapTrap::operator = (const ClapTrap &original)
 {
-	std::cout << "overload assignment operator called" << std::endl << std::endl;
+	std::cout << "ClapTrap overload assignment operator called" << std::endl << std::endl;
 	if (this != &original)
 	{
 		name = original.name;

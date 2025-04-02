@@ -1,12 +1,12 @@
-NAME = ScavTrap
+NAME = DiamondTrap
 all: $(NAME)
 
 CPP := c++
 FLAGS := -Wall -Wextra -Werror -std=c++11
 
-SOURCE := ClapTrap.cpp ScavTrap.cpp main.cpp
+SOURCE := ClapTrap.cpp ScavTrap.cpp FragTrap.cpp DiamondTrap.cpp main.cpp
 OBJ := $(SOURCE:.cpp=.o)
-HEADERS := ClapTrap.hpp
+HEADERS := ClapTrap.hpp ScavTrap.hpp FragTrap.hpp
 
 $(NAME) : $(OBJ)
 	$(CPP) $(FLAGS) $(OBJ) -o $(NAME) 
