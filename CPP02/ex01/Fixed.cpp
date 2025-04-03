@@ -26,12 +26,35 @@ Fixed::Fixed(const Fixed &initial)
 Fixed::Fixed(const int valueInt)
 {
 	std::cout << "Int constructor called" << std::endl;
-	_value = (valueInt << bits);//it could just be (value * 256)
+	if (valueInt > MAX_FIXED)
+    {
+        std::cout << "Integer value too large! Clamping to max." << std::endl;
+        _value = MAX_FIXED << bits;
+    }
+	else if (valueInt < MIN_FIXED)
+	{
+        std::cout << "Integer value too small! Clamping to min." << std::endl;
+        _value = MIN_FIXED * (1 << bits);
+    }
+	else
+	{
+		_value = (valueInt << bits);//it could just be (value * 256 - for 8 bits)
+	}
 }
 
 Fixed::Fixed(const float valueFl)
 {
 	std::cout << "Float constructor called" << std::endl;
+	if (valueFl > MAX_FIXED)
+    {
+        std::cout << "Float value too large! Clamping to max." << std::endl;
+        _value = (int)roundf(MAX_FIXED * (1 << bits));
+    }
+	else if (valueFl < MIN_FIXED)
+    {
+        std::cout << "Float value too small! Clamping to min." << std::endl;
+        _value = (int)roundf(MIN_FIXED * (1 << bits));
+    }
 	_value = (int)roundf(valueFl * (1 << bits));//this also could be (value * 256.0f)
 }
 

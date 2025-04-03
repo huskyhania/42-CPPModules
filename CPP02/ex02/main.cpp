@@ -13,6 +13,7 @@
 #include "Fixed.hpp"
 
 int main( void ) {
+	
 	Fixed a;
 	Fixed const b( Fixed( 5.05f ) * Fixed( 2 ) );
 	std::cout << a << std::endl;
@@ -76,6 +77,5 @@ int main( void ) {
 	std::cout << "returning (fixed) smaller one of " << test3 << " & " << test4 << std::endl << Fixed::min( test4, test4 ) << std::endl;
 	//if you try calling min or max on const numbers without the const functions it won't compile
 	//if one of the values is const, the const function will be called
-
 	return 0;
 }

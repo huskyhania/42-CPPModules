@@ -26,12 +26,35 @@ Fixed::Fixed(const Fixed &initial)
 Fixed::Fixed(const int valueInt)
 {
 	//std::cout << "Int constructor called" << std::endl;
-	_value = (valueInt << bits);//it could just be (value * 256)
+	if (valueInt > MAX_FIXED)
+    {
+        std::cout << "Integer value too large! Clamping to max." << std::endl;
+        _value = MAX_FIXED << bits;
+    }
+	else if (valueInt < MIN_FIXED)
+	{
+        std::cout << "Integer value too small! Clamping to min." << std::endl;
+        _value = MIN_FIXED * (1 << bits);
+    }
+	else
+	{
+		_value = (valueInt << bits);//it could just be (value * 256 - for 8 bits)
+	}
 }
 
 Fixed::Fixed(const float valueFl)
 {
 	//std::cout << "Float constructor called" << std::endl;
+	if (valueFl > MAX_FIXED)
+    {
+        std::cout << "Float value too large! Clamping to max." << std::endl;
+        _value = (int)roundf(MAX_FIXED * (1 << bits));
+    }
+	else if (valueFl < MIN_FIXED)
+    {
+        std::cout << "Float value too small! Clamping to min." << std::endl;
+        _value = (int)roundf(MIN_FIXED * (1 << bits));
+    }
 	_value = (int)roundf(valueFl * (1 << bits));//this also could be (value * 256.0f)
 }
 
@@ -60,24 +83,66 @@ bool Fixed::operator != (const Fixed &num) const {return this->_value != num._va
 
 //Arithmetic operators
 
-Fixed Fixed::operator + (const Fixed &num) const {return Fixed(this->toFloat() + num.toFloat());}
-Fixed Fixed::operator - (const Fixed &num) const {return Fixed(this->toFloat() - num.toFloat());}
-Fixed Fixed::operator * (const Fixed &num) const {return Fixed(this->toFloat() * num.toFloat());}
-Fixed Fixed::operator / (const Fixed &num) const {return Fixed(this->toFloat() / num.toFloat());}
+Fixed Fixed::checkOverflowUnderflow(float result){
+	if (result > MAX_FIXED) {
+		std::cout << "Overflow detected! Returning MAX_FIXED" << std::endl;
+		return Fixed(MAX_FIXED);
+	} else if (result < MIN_FIXED) {
+		std::cout << "Underflow detected! Returning MIN_FIXED" << std::endl;
+		return Fixed(MIN_FIXED);
+	}
+	return Fixed(result);
+}
+
+Fixed Fixed::operator + (const Fixed &num) const {
+	float result = this->toFloat() + num.toFloat();
+	return checkOverflowUnderflow(result);
+}
+
+Fixed Fixed::operator - (const Fixed &num) const {
+	float result = this->toFloat() - num.toFloat();
+	return checkOverflowUnderflow(result);
+}
+
+Fixed Fixed::operator * (const Fixed &num) const {
+	float result = this->toFloat() * num.toFloat();
+	return checkOverflowUnderflow(result);
+}
+
+Fixed Fixed::operator / (const Fixed &num) const {
+	float result = this->toFloat() / num.toFloat();
+	return checkOverflowUnderflow(result);
+}
 
 //Increments
-Fixed& Fixed::operator ++ () {return (this->_value++, *this);}//pre (like ++i)
-Fixed& Fixed::operator -- () {return (this->_value--, *this);}//pre (like --i)
+Fixed& Fixed::operator ++ () {
+	this->_value++;
+	float result = this->toFloat();
+	*this = checkOverflowUnderflow(result);
+	return *this;
+}//pre (like ++i)
+
+
+Fixed& Fixed::operator -- () {
+	this->_value--;
+	float result = this->toFloat();
+	*this = checkOverflowUnderflow(result);
+	return *this;
+}//pre (like --i)
 
 Fixed Fixed::operator ++ (int) {
 	Fixed tmp(*this); 
 	this->_value++;	
+	float result = this->toFloat();
+	*this = checkOverflowUnderflow(result);
 	return tmp;
 }
 
 Fixed Fixed::operator -- (int) {
 	Fixed tmp(*this); 
 	this->_value--;
+	float result = this->toFloat();
+	*this = checkOverflowUnderflow(result);
 	return(tmp);
 }
 

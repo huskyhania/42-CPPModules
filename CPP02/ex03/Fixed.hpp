@@ -14,6 +14,8 @@
 #define FIXED_HPP
 #include <iostream>
 #include <cmath>
+#define MAX_FIXED 8388607
+#define MIN_FIXED -8388608 
 
 class Fixed
 {
@@ -60,6 +62,8 @@ class Fixed
 		static Fixed		&max(Fixed &num1, Fixed &num2);
 		static const Fixed	&min(const Fixed &num1, const Fixed &num2);
 		static const Fixed	&max(const Fixed &num1, const Fixed &num2); 
+
+		static Fixed			checkOverflowUnderflow(float result);
 };
 
 std::ostream &operator << (std::ostream &outstream, const Fixed &fixed);
