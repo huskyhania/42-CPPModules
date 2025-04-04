@@ -17,7 +17,7 @@ ScavTrap::ScavTrap() : ClapTrap("No name"){
 	energyPoints = 50;
 	attackDamage = 20;
 	maxHitPoints = 100;
-	std::cout << "ScavTrap default constructor called for " << name;
+	std::cout << "ScavTrap default constructor called for " << name << std::endl;
 }
 
 ScavTrap::ScavTrap(const std::string &name) : ClapTrap(name){

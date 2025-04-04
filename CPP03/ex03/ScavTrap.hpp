@@ -3,8 +3,10 @@
 #include "ClapTrap.hpp"
 
 class ScavTrap: virtual public ClapTrap{
-//different messages from constr/destr and attack
 	public:
+		const static unsigned int startHitPoints = 100;
+		const static unsigned int startEnergyPoints = 50;
+		const static unsigned int startAttackDamage = 20;
 		ScavTrap();
 		ScavTrap(const std::string &name);
 		ScavTrap(const ScavTrap &original);

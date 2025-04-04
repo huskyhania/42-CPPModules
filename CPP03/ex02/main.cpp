@@ -33,7 +33,8 @@ int	main(void)
 	Henrik.beRepaired(10);
 	Helmut.attack(Hans.getName());
 	Hans.takeDamage(10);*/
-	
+	ScavTrap();
+	FragTrap();
 	ScavTrap Sven("Sven");
 	ScavTrap Sigmund("Sigmund");
 	std::cout << std::endl << std::endl << "--ScavTrap tests--" << std::endl << std::endl;
@@ -46,6 +47,8 @@ int	main(void)
 	FragTrap Troy("Troy");
 	std::cout << std::endl << std::endl << "--FragTrap tests--" << std::endl << std::endl;
 	Troy.attack(Sven.getName());
+	Sven.takeDamage(30);
+	Sven.beRepaired(30);
 	Troy.highFivesGuys();
 	std::cout << std::endl << std::endl;
 	return (0);

@@ -38,6 +38,7 @@ int	main(void)
 	std::cout << std::endl << std::endl << "--ScavTrap tests--" << std::endl << std::endl;
 	Sven.attack(Sigmund.getName());
 	Sigmund.takeDamage(20);
+	Sigmund.beRepaired(10);
 	Sigmund.attack(Sven.getName());
 
 	Sven.guardGate();

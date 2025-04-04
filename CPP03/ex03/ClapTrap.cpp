@@ -1,17 +1,18 @@
 #include "ClapTrap.hpp"
 
-ClapTrap::ClapTrap() : name("No name"), hitPoints(10), energyPoints(10), attackDamage(0), maxHitPoints(10)
+ClapTrap::ClapTrap() : name("No name"), hitPoints(startHitPoints), energyPoints(startEnergyPoints), attackDamage(startAttackDamage)
 {
 	std::cout << "ClapTrap default constructor called for " << name << std::endl << std::endl;
+	std::cout << "values are: " << this->hitPoints << " " << this->energyPoints << " " << this->attackDamage << std::endl;
 }
 
-ClapTrap::ClapTrap(std::string name) : name(name), hitPoints(10), energyPoints(10), attackDamage(0), maxHitPoints(10)
+ClapTrap::ClapTrap(std::string name) : name(name), hitPoints(startHitPoints), energyPoints(startEnergyPoints), attackDamage(startAttackDamage)
 {
 	std::cout << std::endl << "ClapTrap parameter constructor called for " << name << std::endl;
 }
 
 ClapTrap::ClapTrap(const ClapTrap &original) : name(original.name), hitPoints(original.hitPoints), energyPoints(original.energyPoints),
-	attackDamage(original.attackDamage), maxHitPoints(original.maxHitPoints)
+	attackDamage(original.attackDamage)
 {
 	std::cout << std::endl << "ClapTrap copy constructor called for " << name << std::endl << std::endl;
 }
@@ -25,7 +26,6 @@ ClapTrap &ClapTrap::operator = (const ClapTrap &original)
 		hitPoints = original.hitPoints;
 		energyPoints = original.energyPoints;
 		attackDamage = original.attackDamage;
-		maxHitPoints = original.maxHitPoints;
 	}
 	return (*this);
 }
@@ -76,7 +76,7 @@ void	ClapTrap::beRepaired(unsigned int amount)
 	}
 	else{
 		energyPoints--;
-		hitPoints = (hitPoints + amount > maxHitPoints) ? maxHitPoints : hitPoints + amount;
+		hitPoints = (hitPoints + amount > startHitPoints) ? startHitPoints : hitPoints + amount;
 		std::cout << "ClapTrap " << name << " is restored with " << amount << " points and now has " 
 			<< hitPoints << " hit points" << std::endl;
 	}
@@ -99,5 +99,5 @@ unsigned int ClapTrap::getEnergyPoints() const
 
 ClapTrap::~ClapTrap()
 {
-	std::cout << "destructor called for " << name << std::endl;
+	std::cout << "ClapTrap destructor called for " << name << std::endl;
 }

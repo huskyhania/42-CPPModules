@@ -1,24 +1,26 @@
 #include "ClapTrap.hpp"
 
-ClapTrap::ClapTrap() : name("No name"), hitPoints(10), energyPoints(10), attackDamage(0), maxHitPoints(10)
+ClapTrap::ClapTrap() : name("No name"), hitPoints(10), energyPoints(10), attackDamage(0)
 {
-	std::cout << "default constructor called" << std::endl << std::endl;
+	std::cout << "default constructor called" << std::endl;
+	maxHitPoints = hitPoints;
 }
 
-ClapTrap::ClapTrap(std::string name) : name(name), hitPoints(10), energyPoints(10), attackDamage(0), maxHitPoints(10)
+ClapTrap::ClapTrap(std::string name) : name(name), hitPoints(10), energyPoints(10), attackDamage(0)
 {
-	std::cout << std::endl << "parameter constructor called" << std::endl << std::endl;
+	maxHitPoints = hitPoints;
+	std::cout << "parameter constructor called" << std::endl;
 }
 
 ClapTrap::ClapTrap(const ClapTrap &original) : name(original.name), hitPoints(original.hitPoints), energyPoints(original.energyPoints),
 	attackDamage(original.attackDamage), maxHitPoints(original.maxHitPoints)
 {
-	std::cout << std::endl << "copy constructor called" << std::endl << std::endl;
+	std::cout << "copy constructor called" << std::endl;
 }
 
 ClapTrap &ClapTrap::operator = (const ClapTrap &original)
 {
-	std::cout << "overload assignment operator called" << std::endl << std::endl;
+	std::cout << "overload assignment operator called" << std::endl;
 	if (this != &original)
 	{
 		name = original.name;
@@ -47,6 +49,7 @@ void	ClapTrap::attack(const std::string& target)
 		std::cout << "ClapTrap " << name << " cannot attack due to lack of energy" << std::endl;
 	}
 }
+//ternary: checks the condition, two options for true and false after the question mark, separated by a :
 void	ClapTrap::takeDamage(unsigned int amount)
 {
 	if (hitPoints == 0){
@@ -54,19 +57,13 @@ void	ClapTrap::takeDamage(unsigned int amount)
 	}
 	else if (hitPoints > 0 && amount > 0){
 		hitPoints = (hitPoints > amount) ? (hitPoints - amount) : 0;
-		//works same as: 
-		//if (hitPoints > 0) 
-		//	hitPoints = hitPoints - amount 
-		//else 
-		//hitPoints = 0;
 		std::cout << "ClapTrap " << name << " has been hit and received " << amount << " damage" << std::endl;
 		std::cout << name << " has " << hitPoints << " hit points left" << std::endl;
 	}
 
 }
-
-void	ClapTrap::beRepaired(unsigned int amount)
 //check hitpoints, increase energy (or not), print result
+void	ClapTrap::beRepaired(unsigned int amount)
 {
 	if (hitPoints == 0){
 		std::cout << "ClapTrap " << name << " is basically dead and cannot be repaired" << std::endl; 
@@ -99,5 +96,5 @@ unsigned int ClapTrap::getEnergyPoints() const
 
 ClapTrap::~ClapTrap()
 {
-	std::cout << std::endl << "destructor called" << std::endl;
+	std::cout << "destructor called" << std::endl;
 }

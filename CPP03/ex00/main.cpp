@@ -16,6 +16,7 @@ int	main(void)
 {
 	ClapTrap Hans("Hans");
 	ClapTrap Henrik("Henrik");
+	std::cout << std::endl;
 
 	Hans.attack(Henrik.getName());
 	Henrik.takeDamage(1);
@@ -24,7 +25,10 @@ int	main(void)
 	Henrik.takeDamage(10);
 	Henrik.beRepaired(1);
 
+	std::cout << std::endl;
 	ClapTrap Helmut("Helmut");
+	std::cout << std::endl;
+	
 	Helmut.attack(Hans.getName());
 	Hans.takeDamage(10);
 	Henrik.beRepaired(10);
@@ -32,6 +36,7 @@ int	main(void)
 	Helmut.attack(Hans.getName());
 	Hans.takeDamage(10);
 
-	
+	std::cout << std::endl;
+
 	return (0);
 }

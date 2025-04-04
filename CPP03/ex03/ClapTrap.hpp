@@ -10,8 +10,10 @@ class ClapTrap
 		unsigned int hitPoints;
 		unsigned int energyPoints;
 		unsigned int attackDamage;
-		unsigned int maxHitPoints;
 	public:
+		const static unsigned int startHitPoints = 10;
+		const static unsigned int startEnergyPoints = 10;
+		const static unsigned int startAttackDamage = 0;
 		ClapTrap();
 		ClapTrap(std::string name);
 		ClapTrap(const ClapTrap &original);

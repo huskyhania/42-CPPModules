@@ -2,8 +2,8 @@
 #define SCAVTRAP_HPP
 #include "ClapTrap.hpp"
 
+//has to have different messages from constr/destr and attack
 class ScavTrap: public ClapTrap{
-//different messages from constr/destr and attack
 	public:
 		ScavTrap();
 		ScavTrap(const std::string &name);

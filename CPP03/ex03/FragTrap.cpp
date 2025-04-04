@@ -12,19 +12,18 @@
 
 #include "FragTrap.hpp"
 
-FragTrap::FragTrap() : ClapTrap("No name"){
-	hitPoints = 100;
-	energyPoints = 100;
-	attackDamage = 30;
-	maxHitPoints = 100;
+FragTrap::FragTrap() : ClapTrap(){
+	hitPoints = startHitPoints;
+	energyPoints = startEnergyPoints;
+	attackDamage = startAttackDamage;
 	std::cout << "FragTrap default constructor called for " << name << std::endl;
+	std::cout << "values are: " << this->hitPoints << " " << this->energyPoints << " " << this->attackDamage << std::endl;
 }
 
 FragTrap::FragTrap(const std::string &name) : ClapTrap(name){
-	hitPoints = 100;
-	energyPoints = 100;
-	attackDamage = 30;
-	maxHitPoints = 100;
+	hitPoints = startHitPoints;
+	energyPoints = startEnergyPoints;
+	attackDamage = startAttackDamage;
 	std::cout << "FragTrap parameter constructor called for " << name;
 } 
 
@@ -41,7 +40,6 @@ FragTrap &FragTrap::operator = (const FragTrap &original)
 		hitPoints = original.hitPoints;
 		energyPoints = original.energyPoints;
 		attackDamage = original.attackDamage;
-		maxHitPoints = original.maxHitPoints;
 	}
 	return (*this);
 }

@@ -12,19 +12,18 @@
 
 #include "ScavTrap.hpp"
 
-ScavTrap::ScavTrap() : ClapTrap("No name"){
-	hitPoints = 100;
-	energyPoints = 50;
-	attackDamage = 20;
-	maxHitPoints = 100;
+ScavTrap::ScavTrap() : ClapTrap(){
+	hitPoints = startHitPoints;
+	energyPoints = startEnergyPoints;
+	attackDamage = startAttackDamage;
 	std::cout << "ScavTrap default constructor called for " << name << std::endl;
+	std::cout << "values are: " << this->hitPoints << " " << this->energyPoints << " " << this->attackDamage << std::endl;
 }
 
 ScavTrap::ScavTrap(const std::string &name) : ClapTrap(name){
-	hitPoints = 100;
-	energyPoints = 50;
-	attackDamage = 20;
-	maxHitPoints = 100;
+	hitPoints = startHitPoints;
+	energyPoints = startEnergyPoints;
+	attackDamage = startAttackDamage;
 	std::cout << "ScavTrap parameter constructor called for " << name;
 } 
 
@@ -41,7 +40,7 @@ ScavTrap &ScavTrap::operator = (const ScavTrap &original)
 		hitPoints = original.hitPoints;
 		energyPoints = original.energyPoints;
 		attackDamage = original.attackDamage;
-		maxHitPoints = original.maxHitPoints;
+		//maxHitPoints = original.maxHitPoints;
 	}
 	return (*this);
 }

@@ -36,14 +36,27 @@ int	main(void)
 	Helmut.attack(Hans.getName());
 	Hans.takeDamage(10);*/
 	
+	std::cout << "constructor test\n";
+	ClapTrap();
+	ScavTrap();
+	FragTrap();
+	DiamondTrap();
+	std::cout << "\nend constructor test\n";
+
+	DiamondTrap();
 	DiamondTrap Dave("Dave");
 	DiamondTrap David("David");
 	std::cout << std::endl << std::endl << "--DiamondTrap tests--" << std::endl << std::endl;
+	std::cout << Dave.getName() << " energy: " << Dave.getEnergyPoints() << "hit points: " << Dave.getHitPoints() << std::endl; 
+	Dave.beRepaired(0);
+	std::cout << " energy: " << Dave.getEnergyPoints();
 	Dave.attack(David.getName());
 	David.takeDamage(20);
 	David.attack(Dave.getName());
 
 	David.whoAmI();
 	std::cout << std::endl << std::endl;
+
+	
 	return (0);
 }

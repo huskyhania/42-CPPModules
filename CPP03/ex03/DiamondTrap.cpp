@@ -13,18 +13,19 @@
 #include "DiamondTrap.hpp"
 
 DiamondTrap::DiamondTrap() : ClapTrap("NoName_clap_name"), name("NoName"){
-	hitPoints = 100;
-	energyPoints = 50;
-	attackDamage = 30;
-	maxHitPoints = 100;
+	hitPoints = FragTrap::startHitPoints;
+	energyPoints = ScavTrap::startEnergyPoints;
+	attackDamage = FragTrap::startAttackDamage;
+	//maxHitPoints = FragTrap::maxHitPoints;
 	std::cout << "DiamondTrap default constructor called for " << name;
+	std::cout << "values are: " << this->hitPoints << " " << this->energyPoints << " " << this->attackDamage << std::endl;
 }
 
 DiamondTrap::DiamondTrap(const std::string &name) : ClapTrap(name + "_clap_name"), name(name){
-	hitPoints = 100;
-	energyPoints = 50;
-	attackDamage = 30;
-	maxHitPoints = 100;
+	hitPoints = FragTrap::startHitPoints;
+	energyPoints = ScavTrap::startEnergyPoints;
+	attackDamage = FragTrap::startAttackDamage;	
+	//maxHitPoints = FragTrap::maxHitPoints;
 	std::cout << "DiamondTrap parameter constructor called for " << name;
 }
 
@@ -41,7 +42,7 @@ DiamondTrap &DiamondTrap::operator = (const DiamondTrap &original)
 		hitPoints = original.hitPoints;
 		energyPoints = original.energyPoints;
 		attackDamage = original.attackDamage;
-		maxHitPoints = original.maxHitPoints;
+		//maxHitPoints = original.maxHitPoints;
 	}
 	return (*this);
 }
