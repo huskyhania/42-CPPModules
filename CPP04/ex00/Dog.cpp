@@ -12,9 +12,22 @@
 
 #include "Dog.hpp"
 
-Dog::Dog(){
-	type = "dog";
+Dog::Dog() : Animal(){
+	type = "Dog";
 	std::cout << "Dog default constructor called" << std::endl;
+}
+
+Dog::Dog(const Dog &original) : Animal(original){
+	std::cout << "Dog copy constructor called" << std::endl;
+}
+
+Dog &Dog::operator = (const Dog &original){
+	std::cout << "Dog overload assignement operator called" << std::endl;
+	if (this != &original)
+	{
+		type = original.type;
+	}
+	return (*this);
 }
 
 Dog::~Dog()
@@ -22,6 +35,7 @@ Dog::~Dog()
 	std::cout << "Dog destructor called" << std::endl;
 }
 
-void	Dog::makeSound(){
+void	Dog::makeSound() const {
 	std::cout << "HAU HAU" << std::endl;
 }
+

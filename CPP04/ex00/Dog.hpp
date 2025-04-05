@@ -5,8 +5,11 @@
 class Dog: public Animal{
 	public:
 		Dog();
+		Dog(const Dog &original);
+		Dog &operator = (const Dog &original);
 		~Dog();
-		void makeSound();
+		void makeSound() const override;
+		//std::string getType();
 };
 
 #endif
