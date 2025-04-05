@@ -13,7 +13,7 @@ class ScavTrap: virtual public ClapTrap{
 		~ScavTrap();
 		ScavTrap &operator = (const ScavTrap &original);
 		void guardGate();
-		void attack(const std::string& target) override; 
+		void attack(const std::string& target) override;
+		unsigned int getStartHitPoints() const override;
 };
-
 #endif

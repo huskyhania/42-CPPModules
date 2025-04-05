@@ -6,7 +6,7 @@
 /*   By: hskrzypi <hskrzypi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 22:29:43 by hskrzypi          #+#    #+#             */
-/*   Updated: 2025/04/02 22:08:02 by hskrzypi         ###   ########.fr       */
+/*   Updated: 2025/04/05 20:06:06 by hskrzypi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,27 +36,38 @@ int	main(void)
 	Helmut.attack(Hans.getName());
 	Hans.takeDamage(10);*/
 	
-	std::cout << "constructor test\n";
+	std::cout << "--constructor test--\n";
 	ClapTrap();
 	ScavTrap();
 	FragTrap();
 	DiamondTrap();
-	std::cout << "\nend constructor test\n";
+	std::cout << "\n--end constructor test--\n";
 
 	DiamondTrap();
 	DiamondTrap Dave("Dave");
 	DiamondTrap David("David");
 	std::cout << std::endl << std::endl << "--DiamondTrap tests--" << std::endl << std::endl;
-	std::cout << Dave.getName() << " energy: " << Dave.getEnergyPoints() << "hit points: " << Dave.getHitPoints() << std::endl; 
+	std::cout << Dave.getName() << " energy: " << Dave.getEnergyPoints() << " hit points: " << Dave.getHitPoints() << std::endl; 
 	Dave.beRepaired(0);
-	std::cout << " energy: " << Dave.getEnergyPoints();
+	std::cout << "energy: " << Dave.getEnergyPoints() << std::endl;
 	Dave.attack(David.getName());
-	David.takeDamage(20);
+	David.takeDamage(Dave.getAttackDamage());
 	David.attack(Dave.getName());
 
+	std::cout << std::endl;
 	David.whoAmI();
 	std::cout << std::endl << std::endl;
+	DiamondTrap Deamon("Deamon");
+	std::cout << "\n\n--functions tests--" << std::endl;
+	David.attack(Deamon.getName());
+	Deamon.takeDamage(David.getAttackDamage());
+	David.attack(Deamon.getName());
+	Deamon.takeDamage(David.getAttackDamage());
+	Deamon.beRepaired(20);
+	Deamon.beRepaired(70);
+	Deamon.guardGate();
+	Deamon.highFivesGuys();
+	std::cout << "\n--end test--" << std::endl;
 
-	
 	return (0);
 }

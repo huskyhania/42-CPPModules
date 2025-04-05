@@ -65,8 +65,8 @@ void	ClapTrap::takeDamage(unsigned int amount)
 
 }
 
-void	ClapTrap::beRepaired(unsigned int amount)
 //check hitpoints, increase energy (or not), print result
+void	ClapTrap::beRepaired(unsigned int amount)
 {
 	if (hitPoints == 0){
 		std::cout << "ClapTrap " << name << " is basically dead and cannot be repaired" << std::endl; 
@@ -76,7 +76,7 @@ void	ClapTrap::beRepaired(unsigned int amount)
 	}
 	else{
 		energyPoints--;
-		hitPoints = (hitPoints + amount > startHitPoints) ? startHitPoints : hitPoints + amount;
+		hitPoints = (hitPoints + amount > getStartHitPoints()) ? getStartHitPoints() : hitPoints + amount;
 		std::cout << "ClapTrap " << name << " is restored with " << amount << " points and now has " 
 			<< hitPoints << " hit points" << std::endl;
 	}
@@ -95,6 +95,16 @@ unsigned int ClapTrap::getHitPoints() const
 unsigned int ClapTrap::getEnergyPoints() const
 {
 	return energyPoints;
+}
+
+unsigned int ClapTrap::getAttackDamage() const
+{
+	return attackDamage;
+}
+
+unsigned int ClapTrap::getStartHitPoints() const
+{
+	return startHitPoints;
 }
 
 ClapTrap::~ClapTrap()

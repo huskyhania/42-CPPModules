@@ -14,7 +14,10 @@ class FragTrap: virtual public ClapTrap{
 		FragTrap &operator = (const FragTrap &original);
 
 		void	attack(const std::string& target) override;
+		unsigned int getStartHitPoints() const override;
+		
 		void	highFivesGuys(void);
+
 };
 
 #endif

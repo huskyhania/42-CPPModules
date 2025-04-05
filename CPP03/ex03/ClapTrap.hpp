@@ -25,6 +25,8 @@ class ClapTrap
 		std::string getName() const;
 		unsigned int getHitPoints() const;
 		unsigned int getEnergyPoints() const;
+		unsigned int getAttackDamage() const;
+		virtual unsigned int getStartHitPoints() const;
 };
 
 #endif

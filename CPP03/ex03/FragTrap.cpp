@@ -66,6 +66,11 @@ void	FragTrap::attack(const std::string& target)
 	}
 }
 
+unsigned int FragTrap::getStartHitPoints() const 
+{
+	return FragTrap::startHitPoints;
+}
+
 void	FragTrap::highFivesGuys(void){
 	std::cout << "Give it here for FragTrap " << name << " *HIGH FIVE* " << std::endl;
 }

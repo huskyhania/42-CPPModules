@@ -40,9 +40,13 @@ ScavTrap &ScavTrap::operator = (const ScavTrap &original)
 		hitPoints = original.hitPoints;
 		energyPoints = original.energyPoints;
 		attackDamage = original.attackDamage;
-		//maxHitPoints = original.maxHitPoints;
 	}
 	return (*this);
+}
+
+unsigned int ScavTrap::getStartHitPoints() const 
+{
+	return ScavTrap::startHitPoints;
 }
 
 ScavTrap::~ScavTrap(){
