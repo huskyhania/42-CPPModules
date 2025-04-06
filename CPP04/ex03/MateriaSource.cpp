@@ -12,10 +12,33 @@
 
 #include "MateriaSource.hpp"
 
-MateriaSource::MateriaSource(){}
+MateriaSource::MateriaSource(){
+    for (int i = 0; i < 4; i++)
+    {
+        placeholder[i] = nullptr;
+    }
+}
 
-MateriaSource::~MateriaSource(){}
+MateriaSource::~MateriaSource(){}//needs delete
 
-void MateriaSource::learnMateria(AMateria*){}
+void MateriaSource::learnMateria(AMateria* toCheck){
+    if (toCheck == nullptr){
+        return;
+    }
+    for (int i = 0; i < 4; i++)
+    {
+        if (placeholder[i] == nullptr){
+            placeholder[i] = toCheck;
+            break;
+        }
+    }
+}
 
-AMateria* MateriaSource::createMateria(std::string const &type){}
+AMateria* MateriaSource::createMateria(std::string const &type){
+    for (int i = 0; i < 4; i++){
+        if (placeholder[i] != nullptr && placeholder[i]->getType() == type){
+            return (placeholder[i]->clone());
+        }
+    }
+    return 0;
+}

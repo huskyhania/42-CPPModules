@@ -1,4 +1,4 @@
-NAME = zoo
+NAME = nightmare
 all: $(NAME)
 
 CPP := c++

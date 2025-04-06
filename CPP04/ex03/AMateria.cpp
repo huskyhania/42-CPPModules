@@ -13,7 +13,7 @@
 #include "AMateria.hpp"
 
 AMateria::AMateria() : type("none"){
-	std::cout << "AMateria default constructor called" << std::endl
+	std::cout << "AMateria default constructor called" << std::endl;
 }
 
 AMateria::AMateria(std::string const & type){
@@ -26,12 +26,16 @@ AMateria::AMateria(const AMateria &original){
 	std::cout << "AMateria copy constructor called" << std::endl;
 }
 
+AMateria::~AMateria(){
+	std::cout << "AMateria destructor called" << std::endl;
+}
+
 AMateria &AMateria::operator=(const AMateria &original){
 	std::cout << "AMateria overload assignement operator called" << std::endl;
-	/*if (this != &original){
+	if (this != &original){
 		this->type = original.type;
-	}*/
-	(void) original;
+	}
+	//(void) original;
 	return *this;
 }
 
