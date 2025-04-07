@@ -88,5 +88,12 @@ int main(void)
 		catOne.thinkOutLoud(0);
 		catOne.thinkOutLoud(1);
 	}
+	{
+		std::cout << std::endl << "--last test--" << std::endl;
+		Dog dog1;
+		Dog dog2;
+		dog2 = dog1;
+		std::cout << std::endl << "--end test--" << std::endl;
+	}
 	return (0);
 }
