@@ -11,7 +11,9 @@ class Dog: public Animal{
 		Dog(const Dog &original);
 		Dog &operator = (const Dog &original);
 		virtual ~Dog();
-		void makeSound() const override;
+		void	makeSound() const override;
+		void	think(int index, const std::string& idea);
+		void	thinkOutLoud(int index) const;
 };
 
 #endif

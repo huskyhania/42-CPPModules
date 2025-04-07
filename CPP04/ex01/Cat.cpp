@@ -43,3 +43,15 @@ Cat::~Cat()
 void	Cat::makeSound() const {
 	std::cout << "MIAU MIAU" << std::endl;
 }
+
+void	Cat::think(int index, const std::string& idea){
+	if (brain){
+		brain->setIdea(index, idea);
+	}
+}
+
+void	Cat::thinkOutLoud(int index) const{
+	if (brain){
+		std::cout << "Cat thinks about " << brain->getIdea(index) << std::endl;
+	}
+}

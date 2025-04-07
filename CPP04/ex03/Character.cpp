@@ -1,15 +1,13 @@
 #include "Character.hpp"
 
 Character::Character() : name("noName"){
-	for (int i = 0; i < 4; i++)
-	{
+	for (int i = 0; i < 4; i++){
 		inventory[i] = nullptr;
 	}
 }
 
 Character::Character(std::string name) : name(name){
-	for (int i = 0; i < 4; i++)
-	{
+	for (int i = 0; i < 4; i++){
 		inventory[i] = nullptr;
 	}
 }
@@ -23,14 +21,23 @@ Character::~Character(){
 
 Character::Character(const Character &original): name(original.name){
 	for (int i = 0; i < 4; i++){
-		inventory[i] = (original.inventory[i] != nullptr) ? original.inventory[i] : nullptr;
+		inventory[i] = nullptr;
+		if (original.inventory[i] != nullptr)
+			inventory[i] = original.inventory[i]->clone();
 	}
 }
 
 Character &Character::operator=(const Character &original){
 	if (this != &original){
-		this->~Character();
-		new(this) Character(original);
+		for (int i = 0; i < 4; i++){
+			if (this->inventory[i] != nullptr){
+				delete this->inventory[i];
+			}
+			this->inventory[i] = nullptr;
+			if (original.inventory[i] != nullptr){
+				this->inventory[i] = original.inventory[i]->clone();
+			}
+		}
 	}
 	return (*this);
 }

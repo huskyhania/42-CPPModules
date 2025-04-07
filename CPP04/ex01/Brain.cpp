@@ -6,7 +6,7 @@
 /*   By: hskrzypi <hskrzypi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 12:01:47 by hskrzypi          #+#    #+#             */
-/*   Updated: 2025/04/06 13:00:35 by hskrzypi         ###   ########.fr       */
+/*   Updated: 2025/04/07 15:31:28 by hskrzypi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,11 @@ Brain::~Brain(){
 }
 
 void	Brain::setIdea(int index, std::string idea){
-	ideas[index] = idea;
+	if (index >= 0 && index < 100)
+		ideas[index] = idea;
+	return ;
 }
 
 std::string	Brain::getIdea(int index) const{
-	return (ideas[index]);
+	return (index >= 0 && index < 100) ? ideas[index] : "???";
 }

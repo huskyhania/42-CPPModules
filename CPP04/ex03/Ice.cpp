@@ -13,26 +13,31 @@
 #include "Ice.hpp"
 
 Ice::Ice() : AMateria("ice"){
-	std::cout << "Ice default constructor called" << std::endl;
+	//std::cout << "Ice default constructor called" << std::endl;
 }
 
 Ice::Ice(const Ice &original) : AMateria(original.type){
-	std::cout << "Ice copy constructor called" << std::endl;
+	//std::cout << "Ice copy constructor called" << std::endl;
 }
 	
 Ice &Ice::operator=(const Ice &original){
 	if (this != &original){
-		AMateria::operator=(original);
+		this->type = original.type;
 	}
 	return *this;
 }
 
 Ice::~Ice(){
-	std::cout << "Ice destructor called" << std::endl;
+	//std::cout << "Ice destructor called" << std::endl;
 }
 
 AMateria* Ice::clone() const{
-	return (new Ice);
+	try{
+		return (new Ice);
+	} catch (std::bad_alloc& e){
+		std::cerr << "Memory alloc fail in Ice::clone()" <<std::endl;
+		return nullptr;
+	}
 }
 
 void Ice::use(ICharacter& target){

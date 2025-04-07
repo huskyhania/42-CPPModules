@@ -6,6 +6,8 @@
 #include "ICharacter.hpp"
 #include "Character.hpp"
 
+//this is an abstract class, = 0 makes a method pure virtual one
+//NOT INSTANTIABLE!
 class AMateria{
 	protected:
 		std::string type;	

@@ -5,7 +5,7 @@
 #include <string>
 
 class AMateria;
-
+//this one is used as an interface (with ONLY virtual methods)
 class ICharacter{
 	public:
 		virtual ~ICharacter() {}

@@ -73,6 +73,20 @@ int main(void)
 		std::cout << "Let's see what happens" << std::endl;
 	}
 	std::cout << "Did we get here?" << std::endl;*/
-
+	{
+		std::cout << std::endl << "--brainiac test--" << std::endl << std::endl;
+		Dog dogOne;
+		Cat catOne;
+		std::cout << "Doggy is starting to get ideas..." << std::endl;
+		dogOne.think(0, "chasing ball");
+		dogOne.think(1, "waaaalkies");
+		dogOne.thinkOutLoud(0);
+		dogOne.thinkOutLoud(1);
+		std::cout << "Kitty is starting to get ideas..." << std::endl;
+		catOne.think(0, "ball of yarn");
+		catOne.think(1, "napping in the sun");
+		catOne.thinkOutLoud(0);
+		catOne.thinkOutLoud(1);
+	}
 	return (0);
 }

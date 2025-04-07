@@ -3,6 +3,7 @@
 
 #include "AMateria.hpp"
 
+//this one is used as an interface (with ONLY virtual methods)
 class IMateriaSource{
 	public:
 		virtual ~IMateriaSource() {};

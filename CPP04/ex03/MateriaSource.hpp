@@ -3,15 +3,14 @@
 
 #include "IMateriaSource.hpp"
 
-//make sure it's orthodox cannonical
 class MateriaSource: public IMateriaSource{
 	private:
 		AMateria *placeholder[4];
 	public:
 		MateriaSource();
+		MateriaSource(const MateriaSource& original);
+		MateriaSource& operator=(const MateriaSource& original);
 		~MateriaSource();
-		//copy constructot
-		//asignmenet operator
 		void learnMateria(AMateria*) override;
 		AMateria* createMateria(std::string const & type) override;
 };

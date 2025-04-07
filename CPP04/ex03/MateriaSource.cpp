@@ -19,7 +19,45 @@ MateriaSource::MateriaSource(){
     }
 }
 
-MateriaSource::~MateriaSource(){}//needs delete
+MateriaSource::MateriaSource(const MateriaSource &original){
+    for (int i = 0; i < 4; i++){
+        if (original.placeholder[i]){
+            placeholder[i] = original.placeholder[i]->clone();
+        }
+        else{
+            placeholder[i] = nullptr;
+        }
+    }
+}
+
+MateriaSource& MateriaSource::operator=(const MateriaSource &original){
+    if (this != &original){
+        for (int i = 0; i < 4; i++){
+            if (placeholder[i]){
+                delete placeholder[i];
+                placeholder[i] = nullptr;
+            }
+        }
+        for (int i = 0; i < 4; i++){
+            if (original.placeholder[i]){
+                placeholder[i] = original.placeholder[i]->clone();
+            }
+            else{
+                placeholder[i] = nullptr;
+            }
+        }
+    }
+    return *this;
+}
+
+MateriaSource::~MateriaSource(){
+    for (int i = 0; i < 4; i++){
+        if (placeholder[i] != nullptr){
+            delete placeholder[i];
+            placeholder[i] = nullptr;
+        }
+    }
+}
 
 void MateriaSource::learnMateria(AMateria* toCheck){
     if (toCheck == nullptr){
