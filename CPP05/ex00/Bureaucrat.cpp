@@ -12,10 +12,20 @@
 
 #include "Bureaucrat.hpp"
 
-Bureaucrat::Bureaucrat() : _name("defaultName"), _grade(50) {}
+Bureaucrat::Bureaucrat() : _name("defaultName"), _grade(50) {
+	std::cout << "default constructor called" << std::endl;
+}
 
-Bureaucrat::Bureaucrat(const std::string name, unsigned int grade)
-	: _name(name), _grade(grade){}
+Bureaucrat::Bureaucrat(const std::string name, int grade)
+	: _name(name){
+	if (grade < 1)
+		throw GradeTooHighException();
+	else if (grade > 150)
+		throw GradeTooLowException();
+	else
+		_grade = grade;
+	std::cout << "parameter constructor called" << std::endl;
+}
 
 Bureaucrat &Bureaucrat::operator = (const Bureaucrat &original){
 	if (this != &original)
@@ -25,20 +35,45 @@ Bureaucrat &Bureaucrat::operator = (const Bureaucrat &original){
 	return (*this);
 }
 
-Bureaucrat::~Bureaucrat() {}
+Bureaucrat::~Bureaucrat() {
+	std::cout << "destructor called" << std::endl;
+}
 
-const std::string Bureaucrat::getName() const
-{
+const char* Bureaucrat::GradeTooHighException::what() const throw(){
+	return "The grade is too high";
+}
+
+const char* Bureaucrat::GradeTooLowException::what() const throw(){
+	return "The grade is too low";
+}
+
+const std::string Bureaucrat::getName() const{
 	return _name;
 }
 
-int Bureaucrat::getGrade() const
-{
+int Bureaucrat::getGrade() const{
 	return _grade;
 }
 
-void incrementGrade();
-//if temp <= 0, throw exception
+void Bureaucrat::incrementGrade(){
+	if (_grade <= 1)
+		throw GradeTooHighException();
+	else{ 
+		_grade--;
+		std::cout << "incrementing bureaucrat's grade" << std::endl;
+	}
+}
 
-void decrementGrade();
-//if temp > 150, throw exception
+void Bureaucrat::decrementGrade(){
+	if (_grade >= 150)
+		throw GradeTooLowException();
+	else{
+		_grade++;
+		std::cout << "decrementing bureaucrat's grade" << std::endl;
+	}
+}
+
+std::ostream &operator<<(std::ostream &outstream, Bureaucrat &buro){
+	outstream << buro.getName() << ", bureaucrat grade " << buro.getGrade() << "." << std::endl;
+	return outstream;
+}
