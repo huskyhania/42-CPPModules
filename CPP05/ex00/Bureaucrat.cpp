@@ -27,6 +27,10 @@ Bureaucrat::Bureaucrat(const std::string name, int grade)
 	std::cout << "parameter constructor called" << std::endl;
 }
 
+Bureaucrat::Bureaucrat(const Bureaucrat &original) : _name(original._name), _grade(original._grade){
+	std::cout << "Copy constructor called" << std::endl;
+}
+
 Bureaucrat &Bureaucrat::operator = (const Bureaucrat &original){
 	if (this != &original)
 	{

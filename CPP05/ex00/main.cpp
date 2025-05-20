@@ -6,7 +6,7 @@
 /*   By: hskrzypi <hskrzypi@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 16:33:22 by hskrzypi          #+#    #+#             */
-/*   Updated: 2025/05/20 16:35:44 by hskrzypi         ###   ########.fr       */
+/*   Updated: 2025/05/20 21:29:44 by hskrzypi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,22 @@ int main(void)
 			std::cout << Krystynka << std::endl;
 			Krystynka.decrementGrade();
 			std::cout << Krystynka << std::endl;
+		}
+		catch (std::exception & e){
+			std::cerr << "Exception caught: " << e.what() << std::endl;
+		}
+	}
+	{
+		std::cout << std::endl << "--fifth test--" << std::endl << std::endl;
+		try{
+			Bureaucrat Basia("Basia", 51);
+			Bureaucrat Basia2 = Basia;
+			std::cout << "copy made successfully " << std::endl;
+			std::cout << Basia2 << std::endl;
+			Bureaucrat Gienia("Gienia", 155);
+			Bureaucrat Gienia2 = Gienia;
+			std::cout << "copy made successfully " << std::endl;
+			std::cout << Gienia2 << std::endl;
 		}
 		catch (std::exception & e){
 			std::cerr << "Exception caught: " << e.what() << std::endl;
