@@ -62,5 +62,17 @@ int main ()
             std::cout << e.what() << std::endl;
         }
     }
+    {
+        Form seg("bardzo pilne bardzo wazne", 0, 1, 1);
+        Bureaucrat b1("Henryk", 100);
+        try
+        {
+            seg.beSigned(b1);
+        }
+        catch (const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+    }
     return 0;
 }
