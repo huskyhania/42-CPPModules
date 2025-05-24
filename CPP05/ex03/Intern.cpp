@@ -38,27 +38,54 @@ int chooseReqType(const std::string &name){
 	return (0);
 }
 
+AForm* Intern::createShrubbery(const std::string &target){
+	try{
+		std::cout << "intern creates shrubbery form" << std::endl;
+		return (new ShrubberyCreationForm(target));
+	}
+	catch (const std::bad_alloc &e){
+		std::cout << "memory allocation error for shrubbery" << std::endl;
+		return (nullptr);
+	}
+}
+
+AForm* Intern::createRobotomy(const std::string &target){
+	try{
+		std::cout << "intern creates robotomy form" << std::endl;
+		return (new RobotomyRequestForm(target));
+	}
+	catch (const std::bad_alloc &e){
+		std::cout << "memory allocation error for robotomy" << std::endl;
+		return (nullptr);
+	}
+}
+AForm* Intern::createPardon(const std::string &target){
+	try{
+		std::cout << "intern creates presidential pardon form" << std::endl;
+		return (new PresidentialPardonForm(target));
+	}
+	catch (const std::bad_alloc &e){
+		std::cout << "memory allocation error for pardon" << std::endl;
+		return (nullptr);
+	}
+}
+
+
 AForm* Intern::makeForm(const std::string &name, const std::string &target){
 	std::cout << "Intern is trying to create a form" << std::endl;
 	int type = chooseReqType(name);
 	std::cout << type << " --> type" << std::endl;
 	switch(type){
-		case 1:{
-			std::cout << "form chosen: shrubbery" << std::endl;
-			return (new ShrubberyCreationForm(target));
-		}
-		case 2:{
-			std::cout << "form chosen: robotomy" << std::endl;
-			return (new RobotomyRequestForm(target));
-		}
-		case 3:{
-			std::cout << "form chosen: pardon" << std::endl;
-			return (new PresidentialPardonForm(target));
-		}
-		default:{
-			std::cout << "this form is not interns' job" << std::endl;
-			std::cout << "available options: shrubbery, robotomy, pardon" << std::endl;
-			return (nullptr);
-		}
+		case 1:
+			return (createShrubbery(target));
+		case 2:
+			return (createRobotomy(target));
+		case 3:
+			return (createPardon(target));
+		default:
+			// std::cout << "this form is not interns' job" << std::endl;
+			// std::cout << "available options: shrubbery, robotomy, pardon" << std::endl;
+			// return (nullptr);
+			throw std::invalid_argument("unknown form type: " + name);
 	}
 }
