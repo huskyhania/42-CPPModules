@@ -75,17 +75,21 @@ AForm* Intern::makeForm(const std::string &name, const std::string &target){
 	std::cout << "Intern is trying to create a form" << std::endl;
 	int type = chooseReqType(name);
 	std::cout << type << " --> type" << std::endl;
+	AForm *form;
 	switch(type){
 		case 1:
-			return (createShrubbery(target));
+			form = createShrubbery(target);
+			break;
 		case 2:
-			return (createRobotomy(target));
+			form = createRobotomy(target);
+			break;
 		case 3:
-			return (createPardon(target));
+			form = createPardon(target);
+			break;
 		default:
-			// std::cout << "this form is not interns' job" << std::endl;
-			// std::cout << "available options: shrubbery, robotomy, pardon" << std::endl;
-			// return (nullptr);
 			throw std::invalid_argument("unknown form type: " + name);
 	}
+	if (!form)
+		throw std::runtime_error("memory allocation failed in one of the statics\n");
+	return (form);
 }
