@@ -10,15 +10,15 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME = static
+NAME = convert
 all: $(NAME)
 
 CPP := c++
 FLAGS := -Wall -Wextra -Werror -std=c++11
 
-SOURCE := main.cpp
+SOURCE := main.cpp ScalarConverter.cpp
 OBJ := $(SOURCE:.cpp=.o)
-\HEADERS := Bureaucrat.hpp
+HEADERS := ScalarConverter.hpp
 
 $(NAME) : $(OBJ)
 	$(CPP) $(FLAGS) $(OBJ) -o $(NAME) 

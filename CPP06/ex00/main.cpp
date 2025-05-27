@@ -24,3 +24,27 @@
 //multiplying infinity by a non-zero
 //adding or substracting infinity to or from a finite number
 //can be positive or negative
+
+#include "ScalarConverter.hpp"
+
+int main(int argc, char **argv)
+{
+	if (argc == 2)
+		ScalarConverter::convert(argv[1]);
+	else
+		std::cout << "Please give give one argument" << std::endl;
+	// else
+	// {
+	// 	std::cout << "--simple char--" << std::endl;
+	// 	std::string test = "a";
+	// 	std::string test1 = "z";
+	// 	ScalarConverter::convert(test);
+	// 	ScalarConverter::convert(test1);
+	// 	std::cout << "--simple int--" << std::endl;
+	// 	std::string test2 = "0";
+	// 	std::string test3 = "-42";
+	// 	ScalarConverter::convert(test);
+	// 	ScalarConverter::convert(test1);
+	// }
+	return 0;
+}
