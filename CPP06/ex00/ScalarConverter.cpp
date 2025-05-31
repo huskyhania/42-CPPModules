@@ -100,9 +100,15 @@ void printChar(const std::string &s)
 	std::cout << "double: " << static_cast<double>(c) << "\n";
 }
 
-void printInt(const std::string &s)
+void printInt(const std::string &s, int overflowInfo)
 {
+	(void)overflowInfo;
 	try{
+		long long helper = std::stoll(s);
+		if (helper < std::numeric_limits<int>::min() || helper > std::numeric_limits<int>::max())
+		{
+			throw std::out_of_range("Value out of int range");
+		}
 		int i = std::stoi(s);
 		char c = static_cast<char>(i);
 		std::cout << "char: ";
@@ -114,37 +120,53 @@ void printInt(const std::string &s)
 		std::cout << "float: " << std::fixed << std::setprecision(1) << static_cast<float>(i) << "f\n";
 		std::cout << "double: " << static_cast<double>(i) << "\n";
 	}
-	catch (std::exception &e)
+	catch (std::out_of_range &)
 	{
 		std::cout << "overflow detected" << std::endl;
 	}
 }
 
-void printFloat(const std::string &s) {
-	try{
-		float f = std::stof(s);
+void printFloat(const std::string &s, int overflowInfo) {
+	try
+	{
+		std::string temp = s;
+		temp.pop_back();
+ 			 
+		float f = std::stof(temp);
 		std::cout << "char: ";
-		if (std::isnan(f) || std::isinf(f))
+		if (std::isnan(f) || std::isinf(f) || f < std::numeric_limits<char>::min() || f > std::numeric_limits<char>::max())
 			std::cout << "impossible\n";
 		else if (std::isprint(static_cast<char>(f)))
 			std::cout << "'" << static_cast<char>(f) << "'\n";
+		else if (overflowInfo == 1)
+			std::cout << "Impossible\n";
 		else
 			std::cout << "Non displayable\n";
 		std::cout << "int: ";
-		if (std::isnan(f) || std::isinf(f))
+		if (std::isnan(f) || std::isinf(f) || static_cast<int>(f) < std::numeric_limits<int>::min() || static_cast<int>(f) > std::numeric_limits<int>::max())
 			std::cout << "impossible\n";
 		else
 			std::cout << static_cast<int>(f) << "\n";
-		std::cout << "float: " << std::fixed << std::setprecision(1) << f << "f\n";
-		std::cout << "double: " << static_cast<double>(f) << "\n";
+		if (f < std::numeric_limits<float>::min() || f > std::numeric_limits<float>::max())
+			std::cout << "float: impossible\n";
+		else 
+			std::cout << "float: " << std::fixed << std::setprecision(1) << f << "f\n";
+		std::cout << "double: " << f << "\n";
 	}
-	catch (std::exception &e)
+	catch (std::out_of_range &)
 	{
-		std::cout << "overflow detected" << std::endl;
+		std::cout << "char: impossible\nint: impossible\nfloat: impossible\n";
+		double d = std::stod(s);
+		std::cout << "double: " << std::fixed << std::setprecision(1) << d << "f\n";
+	}
+	catch (...)
+	{
+		std::cout << "something else went wrong" << std::endl;
 	}
 }
 
-void printDouble(const std::string &s) {
+void printDouble(const std::string &s, int overflowInfo) {
+	(void)overflowInfo;
 	try{
 		double d = std::stod(s);
 		std::cout << "char: ";
@@ -168,22 +190,36 @@ void printDouble(const std::string &s) {
 		std::cout << "overflow detected" << std::endl;
 	}
 }
+int	isOverflow(double temp)
+{
+	if (temp < -std::numeric_limits<float>::max() || temp > std::numeric_limits<float>::max())
+        return 3;
+	if (temp < static_cast<double>(std::numeric_limits<int>::min()) || temp > static_cast<double>(std::numeric_limits<int>::max()))
+        return 2;
+	if (temp < static_cast<double>(std::numeric_limits<char>::min()) || temp > static_cast<double>(std::numeric_limits<char>::max()))
+        return 1;
+	return 0;
+}
 
 void	ScalarConverter::convert(const std::string toConvert)
 {
 	int type = findType(toConvert);
+	std::cout << "type from find type is: " << type << std::endl;
+	double temp = std::stod(toConvert);
+	int  overflowInfo = isOverflow(temp);
+	std::cout << overflowInfo << " overflow check result\n";
 	switch (type){
 		case CHAR:
 			printChar(toConvert);
 			break;
 		case INT:
-			printInt(toConvert);
+			printInt(toConvert, overflowInfo);
 			break;
 		case FLOAT:
-			printFloat(toConvert);
+			printFloat(toConvert, overflowInfo);
 			break;
 		case DOUBLE:
-			printDouble(toConvert);
+			printDouble(toConvert, overflowInfo);
 			break;
 		default:
 			std::cout << "Please give a valid string" << std::endl;
