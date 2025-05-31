@@ -102,52 +102,51 @@ void printChar(const std::string &s)
 
 void printInt(const std::string &s, int overflowInfo)
 {
-	(void)overflowInfo;
-	try{
-		long long helper = std::stoll(s);
-		if (helper < std::numeric_limits<int>::min() || helper > std::numeric_limits<int>::max())
-		{
-			throw std::out_of_range("Value out of int range");
-		}
+	try
+	{
 		int i = std::stoi(s);
-		char c = static_cast<char>(i);
-		std::cout << "char: ";
-		if (std::isprint(c))
-			std::cout << "'" << c << "'\n";
+		if (overflowInfo)
+			std::cout << "char: impossible\n";
 		else
-			std::cout << "Non displayable\n";
-		std::cout << "int: " << i << "\n";
+		{
+			char c = static_cast<char>(i);
+			std::cout << "char: ";
+			if (std::isprint(c))
+				std::cout << "'" << c << "'\n";
+			else
+				std::cout << "Non displayable\n";
+		}
+		std::cout << "int: " << i << std::endl;
 		std::cout << "float: " << std::fixed << std::setprecision(1) << static_cast<float>(i) << "f\n";
 		std::cout << "double: " << static_cast<double>(i) << "\n";
 	}
-	catch (std::out_of_range &)
+	catch(std::out_of_range)
 	{
-		std::cout << "overflow detected" << std::endl;
+		std::cout << "int overflow\nchar: impossible\nint: impossible\nfloat: impossible\ndouble: impossible\n";
+	}
+	catch(...)
+	{
+		std::cout << "something else went wrong...\n";
 	}
 }
 
 void printFloat(const std::string &s, int overflowInfo) {
 	try
 	{
-		std::string temp = s;
-		temp.pop_back();
- 			 
-		float f = std::stof(temp);
+		float f = std::stof(s);
 		std::cout << "char: ";
-		if (std::isnan(f) || std::isinf(f) || f < std::numeric_limits<char>::min() || f > std::numeric_limits<char>::max())
+		if (std::isnan(f) || std::isinf(f) || overflowInfo)
 			std::cout << "impossible\n";
 		else if (std::isprint(static_cast<char>(f)))
 			std::cout << "'" << static_cast<char>(f) << "'\n";
-		else if (overflowInfo == 1)
-			std::cout << "Impossible\n";
 		else
 			std::cout << "Non displayable\n";
 		std::cout << "int: ";
-		if (std::isnan(f) || std::isinf(f) || static_cast<int>(f) < std::numeric_limits<int>::min() || static_cast<int>(f) > std::numeric_limits<int>::max())
+		if (std::isnan(f) || std::isinf(f) || overflowInfo == 2)
 			std::cout << "impossible\n";
 		else
 			std::cout << static_cast<int>(f) << "\n";
-		if (f < std::numeric_limits<float>::min() || f > std::numeric_limits<float>::max())
+		if (overflowInfo == 3)
 			std::cout << "float: impossible\n";
 		else 
 			std::cout << "float: " << std::fixed << std::setprecision(1) << f << "f\n";
@@ -155,9 +154,7 @@ void printFloat(const std::string &s, int overflowInfo) {
 	}
 	catch (std::out_of_range &)
 	{
-		std::cout << "char: impossible\nint: impossible\nfloat: impossible\n";
-		double d = std::stod(s);
-		std::cout << "double: " << std::fixed << std::setprecision(1) << d << "f\n";
+		std::cout << "char: impossible\nint: impossible\nfloat: impossible\ndouble: impossible\n";
 	}
 	catch (...)
 	{
@@ -166,28 +163,33 @@ void printFloat(const std::string &s, int overflowInfo) {
 }
 
 void printDouble(const std::string &s, int overflowInfo) {
-	(void)overflowInfo;
 	try{
 		double d = std::stod(s);
 		std::cout << "char: ";
-		if (std::isnan(d) || std::isinf(d))
+		if (std::isnan(d) || std::isinf(d) || overflowInfo)
 			std::cout << "impossible\n";
 		else if (std::isprint(static_cast<char>(d)))
 			std::cout << "'" << static_cast<char>(d) << "'\n";
 		else
 			std::cout << "Non displayable\n";
-
 		std::cout << "int: ";
-		if (std::isnan(d) || std::isinf(d))
+		if (std::isnan(d) || std::isinf(d) || overflowInfo > 1)
 			std::cout << "impossible\n";
 		else
 			std::cout << static_cast<int>(d) << "\n";
-		std::cout << "float: " << std::fixed << std::setprecision(1) << static_cast<float>(d) << "f\n";
+		if (overflowInfo < 3)
+			std::cout << "float: " << std::fixed << std::setprecision(1) << static_cast<float>(d) << "f\n";
+		else
+			std::cout << "float: impossible\n";
 		std::cout << "double: " << d << "\n";
 	}
-	catch (std::exception &e)
+	catch (std::out_of_range &)
 	{
-		std::cout << "overflow detected" << std::endl;
+		std::cout << "char: impossible\nint: impossible\nfloat: impossible\ndouble: impossible" << std::endl;
+	}
+	catch (...)
+	{
+		std::cout << "something else went wrong..." << std::endl;
 	}
 }
 int	isOverflow(double temp)
@@ -205,9 +207,13 @@ void	ScalarConverter::convert(const std::string toConvert)
 {
 	int type = findType(toConvert);
 	std::cout << "type from find type is: " << type << std::endl;
-	double temp = std::stod(toConvert);
-	int  overflowInfo = isOverflow(temp);
-	std::cout << overflowInfo << " overflow check result\n";
+	int overflowInfo = 0;
+	if (type != CHAR && type != INVALID)
+	{
+		double temp = std::stod(toConvert);
+		overflowInfo = isOverflow(temp);
+		std::cout << overflowInfo << " overflow check result\n";
+	}
 	switch (type){
 		case CHAR:
 			printChar(toConvert);
