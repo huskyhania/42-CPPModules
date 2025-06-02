@@ -35,8 +35,7 @@ int	isInt(const std::string &s)
 int	isFloat(const std::string &s)
 {
 	if (s == "nanf" || s == "+inff" || s == "-inff")
-		return FLOAT;
-	
+		return FLOAT;	
 	size_t i = 0;
 	bool hasDot = false;
 	if (s[i] == '+' || s[i] == '-')
@@ -122,7 +121,7 @@ void printInt(const std::string &s, int overflowInfo)
 	}
 	catch(std::out_of_range)
 	{
-		std::cout << "int overflow\nchar: impossible\nint: impossible\nfloat: impossible\ndouble: impossible\n";
+		std::cout << "char: impossible\nint: impossible\nfloat: impossible\ndouble: impossible\n";
 	}
 	catch(...)
 	{
@@ -181,7 +180,7 @@ void printDouble(const std::string &s, int overflowInfo) {
 			std::cout << "float: " << std::fixed << std::setprecision(1) << static_cast<float>(d) << "f\n";
 		else
 			std::cout << "float: impossible\n";
-		std::cout << "double: " << d << "\n";
+		std::cout << "double: " << std::fixed << std::setprecision(1) << d << "\n";
 	}
 	catch (std::out_of_range &)
 	{
@@ -194,6 +193,8 @@ void printDouble(const std::string &s, int overflowInfo) {
 }
 int	isOverflow(double temp)
 {
+	if (std::isinf(temp) || std::isnan(temp))
+		return 0;
 	if (temp < -std::numeric_limits<float>::max() || temp > std::numeric_limits<float>::max())
         return 3;
 	if (temp < static_cast<double>(std::numeric_limits<int>::min()) || temp > static_cast<double>(std::numeric_limits<int>::max()))
@@ -206,13 +207,25 @@ int	isOverflow(double temp)
 void	ScalarConverter::convert(const std::string toConvert)
 {
 	int type = findType(toConvert);
-	std::cout << "type from find type is: " << type << std::endl;
+	// std::cout << "type from find type is: " << type << std::endl;
 	int overflowInfo = 0;
 	if (type != CHAR && type != INVALID)
 	{
-		double temp = std::stod(toConvert);
-		overflowInfo = isOverflow(temp);
-		std::cout << overflowInfo << " overflow check result\n";
+		try{
+			double temp = std::stod(toConvert);
+			overflowInfo = isOverflow(temp);
+			//std::cout << overflowInfo << " overflow check result\n";
+		}
+		catch(std::out_of_range)
+		{
+			std::cout << "stod issue in overflow check..." << std::endl;
+			return;
+		}
+		catch(...)
+		{
+			std::cout << "something else went wrong..." << std::endl;
+			return;
+		}
 	}
 	switch (type){
 		case CHAR:
