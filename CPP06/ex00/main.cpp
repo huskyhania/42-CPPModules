@@ -32,7 +32,7 @@ int main(int argc, char **argv)
 	if (argc == 2)
 		ScalarConverter::convert(argv[1]);
 	else
-		std::cout << "Please give give one argument" << std::endl;
+		std::cout << "Please give one argument" << std::endl;
 	// else
 	// {
 	// 	std::cout << "--simple char--" << std::endl;
@@ -45,6 +45,16 @@ int main(int argc, char **argv)
 	// 	std::string test3 = "-42";
 	// 	ScalarConverter::convert(test);
 	// 	ScalarConverter::convert(test1);
+	// 	std::cout << "--pseudo literals--" << std::endl;
+	// 	ScalarConverter::convert("inf");
+	// 	ScalarConverter::convert("-inf");
+	// 	ScalarConverter::convert("nan");
+	// 	ScalarConverter::convert("nanf");
+	// 	std::cout << "--double and float tests--" << std::endl;
+	// 	ScalarConverter::convert("0.345");
+	// 	ScalarConverter::convert("-0.1111");
+	// 	ScalarConverter::convert("0.0001f");
+	// 	ScalarConverter::convert("1.999f");//check int
 	// }
 	return 0;
 }
