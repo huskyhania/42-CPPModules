@@ -1,4 +1,5 @@
 #include "Array.hpp"
+constexpr unsigned int MAX_SIZE = 1000000000;
 
 //creates an empty array
 template <class T>
@@ -8,10 +9,10 @@ Array<T>::Array() : _size(0), _array(nullptr) {}
 template <class T>
 Array<T>::Array(unsigned int n) : _size(n), _array(nullptr)
 {
-	const unsigned int MAX_SIZE = 1000000000;
 	if (n > MAX_SIZE)
 		throw std::length_error("Array size too large/ attempt to initialize with negative numbers");
-	_array = new T[n];
+	if (n > 0)
+		_array = new T[n];
 }
 
 template <class T>
@@ -35,6 +36,14 @@ Array<T> &Array<T>::operator=(const Array &original)
 
 template <class T>
 T &Array<T>::operator[](unsigned int index)
+{
+	if (index >= _size)
+		throw(std::runtime_error("Index out of bounds"));
+	return _array[index];
+}
+
+template <class T>
+const T &Array<T>::operator[](unsigned int index) const
 {
 	if (index >= _size)
 		throw(std::runtime_error("Index out of bounds"));

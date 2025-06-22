@@ -41,6 +41,5 @@ int main(void)
 	iter(int_arr, 5, print_info);
 	iter(char_arr, 6, print_info);
 	iter(fl_arr, 4, print_info);
-	
 	return 0;
 }

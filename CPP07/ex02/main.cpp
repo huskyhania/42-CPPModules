@@ -16,10 +16,9 @@
 int main(void)
 {
 	std::cout << "--test 1--" << std::endl;
-	Array<int> numbers(10);
-	{
 	try
 	{
+		Array<int> numbers(10);
 		for (size_t i = 0; i < 10; i++)
 		{
 			//std::cout << "number from array: " << numbers[i] << std::endl;
@@ -47,7 +46,6 @@ int main(void)
 	catch (...)
 	{
 		std::cout << "something else went wrong...";
-	}
 	}
 	std::cout << std::endl << "--test 2 (with a new)--" << std::endl;
 	{
@@ -103,7 +101,7 @@ int main(void)
 	}
 	catch(const std::exception& e)
 	{
-		std::cout << e.what() << '\n';
+		std::cout << e.what() << std::endl;
 	}
 	catch (...)
 	{
@@ -113,18 +111,43 @@ int main(void)
 	try
 	{
 		Array<int> intArray(0);
-		Array<int> intArray2(-2);
 		std::cout << "size of array: " << intArray.size() << std::endl;
+		Array<int> intArray2(-2);
 		std::cout << "size of array: " << intArray2.size() << std::endl;
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << e.what() << '\n';
+		std::cout << e.what() << std::endl;
 	}
 	catch (...)
 	{
 		std::cout << "something else went wrong..." << std::endl;
 	}
+		std::cout << std::endl << "--test 5 (const subscript operator with bounds check)--" << std::endl;
+	try
+	{
+		Array<int> arr(5);
+		for (size_t i = 0; i < arr.size(); i++)
+			arr[i] = i * 3;
+		const Array<int>& constArr = arr; 
+		std::cout << "Accessing elements through const reference:\n";
+		for (size_t i = 0; i < constArr.size(); i++)
+			std::cout << constArr[i] << " ";
+		std::cout << std::endl;
+		//constArr[0] = 100; - won't compile because [] returns const
+
+		std::cout << "Trying to access out-of-bounds index...\n";
+		std::cout << constArr[10] << std::endl;
+	}
+	catch (const std::exception& e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+	catch (...)
+	{
+		std::cout << "Unexpected exception caught.\n";
+	}
+	return 0;
 }
 
 // #define MAX_VAL 750
