@@ -18,7 +18,7 @@ int main(void)
 	std::cout << "--test 1--" << std::endl;
 	try
 	{
-		Array<int> numbers(10);
+		Array<int> numbers(4);
 		for (size_t i = 0; i < 10; i++)
 		{
 			//std::cout << "number from array: " << numbers[i] << std::endl;
@@ -50,14 +50,21 @@ int main(void)
 	std::cout << std::endl << "--test 2 (with a new)--" << std::endl;
 	{
 		Array<int>* intArray = nullptr;
+		Array<int>* intArray2 = nullptr;
 		try{
 			intArray = new Array<int>(5);
+			intArray2 = intArray;
+			for (size_t i = 0; i < intArray2->size(); i++)
+				(*intArray2)[i] = i * 10;
+			(*intArray2)[2] = 10000;
+			for (size_t i = 0; i < intArray2->size(); i++)
+				std::cout << (*intArray2)[i] << std::endl;
 			for (size_t i = 0; i < intArray->size(); i++)
 				(*intArray)[i] = i * 10;
 			for (size_t i = 0; i < intArray->size(); i++)
 				std::cout << (*intArray)[i] << std::endl;
-			std::cout << "testing size(): " << intArray->size() << std::endl;
-			std::cout << "testing out of bounds: " << (*intArray)[10] << std::endl;
+			std::cout << "testing size(): " << intArray2->size() << std::endl;
+			std::cout << "testing out of bounds: " << (*intArray2)[10] << std::endl;
 		}
 		catch (std::exception &e)
 		{
@@ -67,6 +74,7 @@ int main(void)
 		{
 			std::cout << "something else went wrong...";
 		}
+		//delete intArray2;
 		delete intArray;
 	}
 	std::cout << std::endl <<  "--test 3 (with assignement operator)--" << std::endl;

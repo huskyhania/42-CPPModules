@@ -14,7 +14,7 @@ NAME = tryme
 all: $(NAME)
 
 CPP := c++
-FLAGS := -Wall -Wextra -Werror -std=c++11
+FLAGS := -Wall -Wextra -Werror -std=c++17
 
 SOURCE :=  main.cpp
 OBJ := $(SOURCE:.cpp=.o)
