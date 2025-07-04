@@ -22,7 +22,9 @@ CPP05: exceptions, try and catch
 
 CPP06: static, reinterpret and dynamic casting
 
-CPP07: function templates (in progress)
+CPP07: function and class templates
+
+CPP08: containers, iterators and algorithms
 
 -----------------------------------------------
 
