@@ -14,9 +14,9 @@ NAME = span
 all: $(NAME)
 
 CPP := c++
-FLAGS := -Wall -Wextra -Werror -std=c++11
+FLAGS := -Wall -Wextra -Werror -std=c++17
 
-SOURCE :=  main.cpp
+SOURCE :=  main.cpp Span.cpp
 OBJ := $(SOURCE:.cpp=.o)
 HEADERS := Span.hpp
 

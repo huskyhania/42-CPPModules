@@ -1,19 +1,37 @@
 #pragma once
 #include <vector>
+#include <stdexcept>
+#include <algorithm>
+#include <limits>
+#include <iostream>
 
 class Span
 {
 	private:
 		unsigned int _maxSize;
-		std::vector<int> _numbers;
+		std::vector<int> _numVec;
 	public:
+		Span();
 		Span(unsigned int n);
-		Span(const &Span original);
-		Span &operator=(const &Span original);
+		Span(const Span &original);
+		Span &operator=(const Span &original);
 		~Span();
 		void addNumber(int n);
-		int shortestSpan();
-		int longestSpan();
-		template <typename Iterator>
-		void addRange(Iterator begin, Iterator end);//template implement here
+		unsigned int shortestSpan();
+		unsigned int longestSpan();
+		template <typename InputIterator>
+		void addRange(InputIterator begin, InputIterator end)
+		{
+			size_t rangeSize = std::distance(begin, end);
+			if (_numVec.size() + rangeSize > _maxSize)
+				throw std::runtime_error("Not enough place in Span");
+			_numVec.insert(_numVec.end(), begin, end);
+		}
+		std::vector<int>::iterator begin();
+		std::vector<int>::iterator end();
+		std::vector<int>::const_iterator begin() const;
+		std::vector<int>::const_iterator end() const;
+		
+		size_t size(void);
+		void print(void) const; 
 };
