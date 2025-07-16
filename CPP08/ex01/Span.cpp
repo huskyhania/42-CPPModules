@@ -60,28 +60,6 @@ unsigned int Span::longestSpan(void)
 	return static_cast<unsigned int>(*maxIt - *minIt);
 }
 
-//iterators
-
-// std::vector<int>::iterator Span::begin()
-// {
-// 	return _numVec.begin();
-// }
-
-// std::vector<int>::iterator Span::end()
-// {
-// 	return _numVec.end();
-// }
-
-// std::vector<int>::const_iterator Span::begin() const
-// {
-// 	return _numVec.begin();
-// }
-
-// std::vector<int>::const_iterator Span::end() const 
-// {
-// 	return _numVec.end();
-// }
-
 size_t Span::size(void) 
 {
 	return _numVec.size();
