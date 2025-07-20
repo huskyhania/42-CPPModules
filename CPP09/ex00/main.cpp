@@ -15,9 +15,9 @@
 #include <filesystem>
 #include <fstream>
 
-int check_input(char *filename)
+int check_input(const char *filename, const char *ext)
 {
-	if (std::filesystem::path(filename).extension() != ".txt")
+	if (std::filesystem::path(filename).extension() != ext)
 		throw(std::runtime_error("Invalid file extension"));
 	std::ifstream file(filename);
 	if (!file.is_open())
@@ -36,7 +36,8 @@ int main(int argc, char **argv)
 	{
 		try
 		{
-			check_input(argv[1]);
+			check_input("data.csv", ".csv");
+			check_input(argv[1], ".txt");// add closing of csv if this fails
 			//checkRates();
 		}
 		catch (std::runtime_error &e)
