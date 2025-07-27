@@ -10,20 +10,22 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
-// #include "BitcoinExchange.hpp"
+#include "BitcoinExchange.hpp"
 #include <filesystem>
-#include <fstream>
 
-int check_input(const char *filename, const char *ext)
+void validate_extension(const char *filename, const char *ext)
 {
 	if (std::filesystem::path(filename).extension() != ext)
 		throw(std::runtime_error("Invalid file extension"));
-	std::ifstream file(filename);
+}
+
+void open_file(std::ifstream &file, const char *filename)
+{
+	file.open(filename);
 	if (!file.is_open())
 		throw(std::runtime_error("No permissions to open file"));
-	return 0;
 }
+
 
 int main(int argc, char **argv)
 {
@@ -32,18 +34,21 @@ int main(int argc, char **argv)
 		std::cout << "\033[31mWrong usage\033[0m" << std::endl;
 		std::cout << "Please run the program with one input file in txt format" << std::endl;
 	}
-	else
+	std::ifstream csv_file;
+	std::ifstream input_file;
+	try
 	{
-		try
-		{
-			check_input("data.csv", ".csv");
-			check_input(argv[1], ".txt");// add closing of csv if this fails
-			//checkRates();
-		}
-		catch (std::runtime_error &e)
-		{
-			std::cout << e.what() << std::endl;
-		}
+		validate_extension("data.csv", ".csv");
+		open_file(csv_file, "data.csv");
+		validate_extension(argv[1], ".txt");
+		open_file(input_file, argv[1]);
+		BitcoinExchange btc;
+		btc.useDatabase(csv_file);
+		btc.useInput(input_file);
+	}
+	catch (std::runtime_error &e)
+	{
+		std::cout << e.what() << std::endl;
 	}
 	return 0;
 }

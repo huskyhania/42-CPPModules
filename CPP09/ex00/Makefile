@@ -17,7 +17,7 @@ all: $(NAME)
 CPP := c++
 FLAGS := -Wall -Wextra -Werror -std=c++17
 
-SOURCE :=  main.cpp
+SOURCE :=  BitcoinExchange.cpp main.cpp
 OBJ := $(SOURCE:.cpp=.o)
 HEADERS := BitcoinExchange.hpp
 
