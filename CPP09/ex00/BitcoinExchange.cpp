@@ -49,7 +49,7 @@ void BitcoinExchange::useDatabase(std::ifstream& dataFile)
 		size_t commaPos = line.find(",");
 		if (commaPos == std::string::npos)
 		{
-			std::cerr << "Invalid line (no comma): " << line << std::endl;
+			std::cerr << "Error: invalid line (no comma): " << line << std::endl;
 			continue;
 		}
 		try
@@ -57,7 +57,7 @@ void BitcoinExchange::useDatabase(std::ifstream& dataFile)
 			std::string date = line.substr(0, commaPos);
 			std::string valueStr = line.substr(commaPos + 1);
 			if (!isDateValid(date)) 
-				throw std::runtime_error("Date error in line " + line);
+				throw std::runtime_error("Error: date error in line " + line);
 			float value = std::stof(valueStr);
 			database[date] = value;
 		} 
@@ -80,17 +80,17 @@ void BitcoinExchange::useInput(std::ifstream& inputFile)
 		std::string valueStr;
 		if (!(iss >> date >> pipe >> valueStr))
 		{
-			std::cerr << "Error: Bad input: " << line << std::endl;
+			std::cerr << "Error: bad input: " << line << std::endl;
 			continue;
 		}
 		if (pipe != "|")
 		{
-			std::cerr << "Error: Expected '|', found '" << pipe << "' in line: " << line << std::endl;
+			std::cerr << "Error: expected '|', found '" << pipe << "' in line: " << line << std::endl;
 			continue;
 		}
 		if (!isDateValid(date))
 		{
-			std::cerr << "Error: Invalid date: " << date << " in line: " << line << std::endl;
+			std::cerr << "Error: invalid date: " << date << " in line: " << line << std::endl;
 			continue;
 		}
 		float inputValue;
@@ -99,18 +99,18 @@ void BitcoinExchange::useInput(std::ifstream& inputFile)
 			inputValue = std::stof(valueStr);
 			if (inputValue < 0)
 			{
-				std::cerr << "Error not a positive number " << valueStr << " in line: " << line << std::endl;
+				std::cerr << "Error: not a positive number in line: " << line << std::endl;
 				continue;
 			}
 			if (inputValue > 1000)
 			{
-				std::cerr << "Error: too large a number " << valueStr << " in line: " << line << std::endl;
+				std::cerr << "Error: too large a number in line: " << line << std::endl;
 				continue;
 			}
 		}
 		catch (const std::exception& e)
 		{
-			std::cerr << "Error: conversion to float failed " << valueStr << " in line: " << line << std::endl;
+			std::cerr << "Error: conversion to float failed in line: " << line << std::endl;
 			continue;
 		}
 		auto it = database.lower_bound(date);
@@ -118,7 +118,7 @@ void BitcoinExchange::useInput(std::ifstream& inputFile)
 		{
 			if (it == database.begin())
 			{
-				std::cerr << "Error: No data available for date or earlier: " << date << std::endl;
+				std::cerr << "Error: no data available for date or earlier: " << date << std::endl;
 				continue;
 			}
 			--it;
@@ -127,7 +127,6 @@ void BitcoinExchange::useInput(std::ifstream& inputFile)
 		float rate = it->second;
 		float result = inputValue * rate;
 
-		std::cout << std::fixed << std::setprecision(2);
 		std::cout << date << " => " << inputValue << " = " << result << std::endl;
 	}
 }

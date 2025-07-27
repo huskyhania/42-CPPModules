@@ -16,14 +16,14 @@
 void validate_extension(const char *filename, const char *ext)
 {
 	if (std::filesystem::path(filename).extension() != ext)
-		throw(std::runtime_error("Invalid file extension"));
+		throw(std::runtime_error("Error: Invalid file extension"));
 }
 
 void open_file(std::ifstream &file, const char *filename)
 {
 	file.open(filename);
 	if (!file.is_open())
-		throw(std::runtime_error("No permissions to open file"));
+		throw(std::runtime_error("Error: No permissions to open file"));
 }
 
 
@@ -31,7 +31,7 @@ int main(int argc, char **argv)
 {
 	if (argc != 2)
 	{
-		std::cout << "\033[31mWrong usage\033[0m" << std::endl;
+		std::cout << "\033[31mError: Wrong usage\033[0m" << std::endl;
 		std::cout << "Please run the program with one input file in txt format" << std::endl;
 	}
 	std::ifstream csv_file;
