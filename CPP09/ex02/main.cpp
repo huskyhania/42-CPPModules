@@ -22,68 +22,61 @@ void printPairs(const std::vector<std::vector<int>>& pairs, const std::string& m
     std::cout << "\n\n";
 }
 
-//make pairs returns a vector of vectors
-std::vector<std::vector<int>> makePairs(std::vector<int>& nums, int& orphan)
+void printGroups(const std::vector<std::vector<int>>& groups, const std::string& msg = "") 
 {
-        std::vector<std::vector<int>> pairs;
-    
-        if (nums.size() % 2 == 1) 
-        {
-            orphan = nums.back();
-            nums.pop_back();
+    if (!msg.empty()) std::cout << msg << "\n";
+    for (const auto& g : groups) 
+    {
+        std::cout << "(";
+        for (size_t i = 0; i < g.size(); ++i) {
+            std::cout << g[i];
+            if (i + 1 < g.size()) std::cout << ", ";
         }
-        else
-            orphan = -1;
-        for (size_t i = 0; i < nums.size(); i += 2) 
-        {
-            if (nums[i] > nums[i+1])
-                pairs.push_back({nums[i], nums[i+1]});
-            else
-                pairs.push_back({nums[i+1], nums[i]});
-        }
-        std::cout << "Pairs:\n";
-        for (const auto& pair : pairs) 
-        {
-            std::cout << "(";
-            for (size_t j = 0; j < pair.size(); ++j) 
-            {
-                std::cout << pair[j];
-                if (j + 1 < pair.size()) std::cout << ", ";
-            }
-            std::cout << ")\n";
-        }  
-        return pairs;
+        std::cout << ") ";
+    }
+    std::cout << "\n\n";
 }
 
-// Recursively sort pairs based on the first (max) element
-void sortFirstElements(std::vector<std::vector<int>>& pairs) 
+void debugStep(const std::vector<int>& left, const std::vector<int>& right, 
+               int winner, int loser) 
 {
-    if (pairs.size() <= 1)
+    std::cout << "Comparing pairs (" << left[0] << "," << left[1] 
+              << ") and (" << right[0] << "," << right[1] << "): ";
+    std::cout << "Winner = " << winner << ", Loser = " << loser << "\n";
+}
+
+void mergeSort(std::vector<int>& numbers, size_t elemSize) 
+{
+    if (elemSize >= numbers.size()) 
         return;
-
-    std::vector<std::vector<int>> newPairs;
-
-    for (size_t i = 0; i < pairs.size(); i += 2) 
+    else 
     {
-        if (i + 1 < pairs.size())
+        size_t half = elemSize / 2;
+
+        for (size_t i = 0; i + elemSize <= numbers.size(); i += elemSize) 
         {
-            if (pairs[i][0] > pairs[i+1][0])
+            size_t leftEnd  = i + half - 1;
+            size_t rightEnd = i + elemSize - 1;
+            std::cout << "numbers compared: " << numbers[leftEnd] << " and " 
+            << numbers[rightEnd] << std::endl;
+            if (numbers[leftEnd] > numbers[rightEnd]) 
             {
-                pairs[i].insert(pairs[i].end(), pairs[i+1].begin(), pairs[i+1].end());
-                newPairs.push_back(pairs[i]);
-            } 
-            else 
-            {
-                pairs[i+1].insert(pairs[i+1].end(), pairs[i].begin(), pairs[i].end());
-                newPairs.push_back(pairs[i+1]);
+                for (size_t j = 0; j < half; ++j) 
+                {
+                    std::swap(numbers[i + j], numbers[i + half + j]); // COUNT
+                }
             }
         }
-        else
-            newPairs.push_back(pairs[i]);
     }
-    pairs = newPairs;
-    printPairs(pairs, "After sorting step:");
-    sortFirstElements(pairs);
+    std::cout << "recursion for elem size: " << elemSize << std::endl;
+    for (auto it = numbers.begin(); it != numbers.end(); it++)
+    {
+        std::cout << *it;
+        std::cout << " ";
+    }
+    std::cout << std::endl;
+    if (elemSize * 2 <= numbers.size())
+        mergeSort(numbers, elemSize * 2);
 }
 
 int main(int argc, char **argv)
@@ -110,9 +103,7 @@ int main(int argc, char **argv)
             std::cout << item << " ";
         }
         std::cout << std::endl;
-        int orphan;
-        auto pairs = makePairs(orgNumbers, orphan);
-        sortFirstElements(pairs);
+        mergeSort(orgNumbers, 2);
     }
     catch(std::exception &e)
     {
