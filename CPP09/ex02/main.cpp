@@ -4,6 +4,7 @@
 #include <exception>
 #include <algorithm>
 //validate input (positive ints)
+static size_t comparisons = 0;
 
 unsigned int jacobsthal_number(unsigned int num)
 {
@@ -14,49 +15,15 @@ unsigned int jacobsthal_number(unsigned int num)
     return jacobsthal_number(num - 1) + 2 * jacobsthal_number(num - 2);
 }
 
-// void printPairs(const std::vector<std::vector<int>>& pairs, const std::string& msg = "") 
-// {
-//     if (!msg.empty()) 
-//         std::cout << msg << "\n";
-//     for (const auto& pair : pairs) 
-//     {
-//         std::cout << "(";
-//         for (size_t i = 0; i < pair.size(); ++i) 
-//         {
-//             std::cout << pair[i];
-//             if (i + 1 < pair.size()) std::cout << ", ";
-//         }
-//         std::cout << ") ";
-//     }
-//     std::cout << "\n\n";
-// }
-
-// void printGroups(const std::vector<std::vector<int>>& groups, const std::string& msg = "") 
-// {
-//     if (!msg.empty()) std::cout << msg << "\n";
-//     for (const auto& g : groups) 
-//     {
-//         std::cout << "(";
-//         for (size_t i = 0; i < g.size(); ++i) {
-//             std::cout << g[i];
-//             if (i + 1 < g.size()) std::cout << ", ";
-//         }
-//         std::cout << ") ";
-//     }
-//     std::cout << "\n\n";
-// }
-
-// void debugStep(const std::vector<int>& left, const std::vector<int>& right, 
-//                int winner, int loser) 
-// {
-//     std::cout << "Comparing pairs (" << left[0] << "," << left[1] 
-//               << ") and (" << right[0] << "," << right[1] << "): ";
-//     std::cout << "Winner = " << winner << ", Loser = " << loser << "\n";
-// }
-
 void insertPendIntoMain(std::vector<int>& main, std::vector<int>& pend) 
 {
     std::vector<bool> inserted(pend.size(), false);
+
+    auto comp = [&](int a, int b) 
+    {
+        comparisons++;
+        return a < b;
+    };
 
     size_t k = 1;
     size_t J = jacobsthal_number(k);
@@ -64,7 +31,7 @@ void insertPendIntoMain(std::vector<int>& main, std::vector<int>& pend)
         size_t index = J - 1;
         if (!inserted[index]) 
         {
-            auto pos = std::lower_bound(main.begin(), main.end(), pend[index]);
+            auto pos = std::lower_bound(main.begin(), main.end(), pend[index], comp);
             main.insert(pos, pend[index]);
             inserted[index] = true;
         }
@@ -72,12 +39,11 @@ void insertPendIntoMain(std::vector<int>& main, std::vector<int>& pend)
         J = jacobsthal_number(k);
     }
 
-    // Insert remaining pend elements
     for (size_t i = 0; i < pend.size(); ++i) 
     {
         if (!inserted[i]) 
         {
-            auto pos = std::lower_bound(main.begin(), main.end(), pend[i]);
+            auto pos = std::lower_bound(main.begin(), main.end(), pend[i], comp);
             main.insert(pos, pend[i]);
         }
     }
@@ -86,11 +52,12 @@ void insertPendIntoMain(std::vector<int>& main, std::vector<int>& pend)
 void mainPendBuild(std::vector<int>& numbers, size_t largestBlock)
 {
     size_t block = largestBlock;
+    std::vector<int> current = numbers;
     while (block >= 1) 
     {
         std::vector<int> blockEnds;
-        for (size_t i = block - 1; i < numbers.size(); i += block)
-            blockEnds.push_back(numbers[i]);
+        for (size_t i = block - 1; i < current.size(); i += block)
+            blockEnds.push_back(current[i]);
 
         std::vector<int> main, pend;
         if (blockEnds.size() >= 2) 
@@ -114,16 +81,31 @@ void mainPendBuild(std::vector<int>& numbers, size_t largestBlock)
         for (auto v : main) 
             std::cout << v << " ";
         std::cout << std::endl;
+        std::cout << "pend before insertion: " << std::endl;
+        for (auto v : pend) 
+            std::cout << v << " ";
+        std::cout << std::endl;
         insertPendIntoMain(main, pend);
         std::cout << "main after insertion: " << std::endl;
         for (auto v : main) 
             std::cout << v << " "; 
         std::cout << std::endl;
-
+        std::cout << "pend after insertion: " << std::endl;
+        for (auto v : pend) 
+            std::cout << v << " ";
+        std::cout << std::endl;
+        for (size_t k = 0; k < main.size(); ++k) 
+        {
+            current[block - 1 + k * block] = main[k];
+        }
         if (block == 1) 
             break;
         block /= 2;
     }
+    numbers = current;
+    for (auto a : numbers)
+        std::cout << a << " ";
+    std::cout << std::endl;
 }
 
 void mergeSort(std::vector<int>& numbers, size_t elemSize, size_t& largestBlock)
@@ -136,7 +118,8 @@ void mergeSort(std::vector<int>& numbers, size_t elemSize, size_t& largestBlock)
     {
         for (size_t i = 0; i + 1 < numbers.size(); i += 2)
         {
-            if (numbers[i] > numbers[i + 1]) //count these
+            comparisons++;
+            if (numbers[i] > numbers[i + 1])
             {
                 std::swap(numbers[i], numbers[i + 1]);
             }
@@ -150,7 +133,8 @@ void mergeSort(std::vector<int>& numbers, size_t elemSize, size_t& largestBlock)
             size_t rightEnd = i + 2 * elemSize - 1;
             std::cout << "numbers compared: " << numbers[leftEnd] << " and " 
             << numbers[rightEnd] << std::endl;
-            if (numbers[leftEnd] > numbers[rightEnd])//count these!!!
+            comparisons++;
+            if (numbers[leftEnd] > numbers[rightEnd])
             {
                 for (size_t j = 0; j < elemSize; ++j) {
                     std::swap(numbers[i + j], numbers[i + elemSize + j]);
@@ -197,6 +181,7 @@ int main(int argc, char **argv)
         size_t largestBlock = 0;
         mergeSort(orgNumbers, 1, largestBlock);
         mainPendBuild(orgNumbers, largestBlock);
+        std::cout << "\033[31mTotal comparisons: " << comparisons << std::endl;
     }
     catch(std::exception &e)
     {
