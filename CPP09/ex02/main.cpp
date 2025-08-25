@@ -27,11 +27,13 @@ void insertPendIntoMain(std::vector<int>& main, std::vector<int>& pend)
 
     size_t k = 1;
     size_t J = jacobsthal_number(k);
-    while (J <= pend.size()) {
+    while (J <= pend.size())
+    {
         size_t index = J - 1;
         if (!inserted[index]) 
         {
             auto pos = std::lower_bound(main.begin(), main.end(), pend[index], comp);
+            std::cout << "i'm inserting " << pend[index] << " at position with jacobs " << *pos << std::endl;
             main.insert(pos, pend[index]);
             inserted[index] = true;
         }
@@ -45,6 +47,7 @@ void insertPendIntoMain(std::vector<int>& main, std::vector<int>& pend)
         {
             auto pos = std::lower_bound(main.begin(), main.end(), pend[i], comp);
             main.insert(pos, pend[i]);
+            std::cout << "i'm inserting " << pend[i] << " at position (2nd if) " << *pos << std::endl;
         }
     }
 }
@@ -67,8 +70,8 @@ void mainPendBuild(std::vector<int>& numbers, size_t largestBlock)
 
             for (size_t i = 2; i + 1 < blockEnds.size(); i += 2) 
             {
-                pend.push_back(blockEnds[i]);       // b_i
-                main.push_back(blockEnds[i+1]);     // a_i
+                pend.push_back(blockEnds[i]);
+                main.push_back(blockEnds[i+1]);
             }
             if (blockEnds.size() % 2 != 0)
                 pend.push_back(blockEnds.back());
@@ -103,6 +106,7 @@ void mainPendBuild(std::vector<int>& numbers, size_t largestBlock)
         block /= 2;
     }
     numbers = current;
+    std::cout << "Sorting done: ";
     for (auto a : numbers)
         std::cout << a << " ";
     std::cout << std::endl;
@@ -131,8 +135,8 @@ void mergeSort(std::vector<int>& numbers, size_t elemSize, size_t& largestBlock)
         {
             size_t leftEnd  = i + elemSize - 1;
             size_t rightEnd = i + 2 * elemSize - 1;
-            std::cout << "numbers compared: " << numbers[leftEnd] << " and " 
-            << numbers[rightEnd] << std::endl;
+            // std::cout << "numbers compared: " << numbers[leftEnd] << " and " 
+            // << numbers[rightEnd] << std::endl;
             comparisons++;
             if (numbers[leftEnd] > numbers[rightEnd])
             {
@@ -142,12 +146,12 @@ void mergeSort(std::vector<int>& numbers, size_t elemSize, size_t& largestBlock)
             }
         }
     }
-    std::cout << "After elemSize " << elemSize << ": ";
-    for (int n : numbers) std::cout << n << " ";
-    std::cout << "\n";
+    // std::cout << "After elemSize " << elemSize << ": ";
+    // for (int n : numbers) std::cout << n << " ";
+    // std::cout << "\n";
     if (elemSize * 2 * 2 <= numbers.size())
     {
-        std::cout << "recursive call for elem size: " << elemSize * 2 << std::endl;
+        // std::cout << "recursive call for elem size: " << elemSize * 2 << std::endl;
         mergeSort(numbers, elemSize * 2, largestBlock);
     }
     else
