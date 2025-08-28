@@ -6,6 +6,11 @@
 //validate input (positive ints)
 static size_t comparisons = 0;
 
+struct Chunk {
+    int value;
+    size_t id;
+};
+
 unsigned int jacobsthal_number(unsigned int num)
 {
     if (num == 0) 
@@ -15,39 +20,92 @@ unsigned int jacobsthal_number(unsigned int num)
     return jacobsthal_number(num - 1) + 2 * jacobsthal_number(num - 2);
 }
 
-void insertPendIntoMain(std::vector<int>& main, std::vector<int>& pend) 
+void insertPendIntoMain(std::vector<Chunk>& main, std::vector<Chunk>& pend) 
 {
     std::vector<bool> inserted(pend.size(), false);
 
-    auto comp = [&](int a, int b) 
+    auto comp = [&](const Chunk& a, const Chunk& b)
     {
         comparisons++;
-        return a < b;
+        return a.value < b.value;
     };
 
     size_t k = 1;
     size_t J = jacobsthal_number(k);
-    while (J <= pend.size())
+
+    while (J <= pend.size()) 
     {
         size_t index = J - 1;
         if (!inserted[index]) 
-        {
-            auto pos = std::lower_bound(main.begin(), main.end(), pend[index], comp);
-            std::cout << "i'm inserting " << pend[index] << " at position with jacobs " << *pos << std::endl;
-            main.insert(pos, pend[index]);
+	{
+            Chunk num_to_insert = pend[index];
+
+            // find its original position in pend by ID
+            size_t jIndex = num_to_insert.id;
+
+            // bound = position of next anchor (id=jIndex+1) in main
+            size_t bound = main.size();
+            if (jIndex + 1 < main.size() + pend.size()) 
+	    {
+                size_t anchorId = jIndex + 1;
+                for (size_t m = 0; m < main.size(); ++m)
+		{
+                    if (main[m].id == anchorId) 
+		    {
+			    bound = m; 
+			    break; 
+		    }
+                }
+            }
+
+            auto pos = std::lower_bound
+		    (
+                main.begin(), main.begin() + std::min(bound, main.size()), 
+                num_to_insert, comp
+            );
+
+            std::cout << "Inserting " << num_to_insert.value 
+                      << " before bound=" << bound << std::endl;
+
+            main.insert(pos, num_to_insert);
             inserted[index] = true;
         }
         k++;
         J = jacobsthal_number(k);
     }
 
+    // Insert leftovers
     for (size_t i = 0; i < pend.size(); ++i) 
     {
         if (!inserted[i]) 
-        {
-            auto pos = std::lower_bound(main.begin(), main.end(), pend[i], comp);
-            main.insert(pos, pend[i]);
-            std::cout << "i'm inserting " << pend[i] << " at position (2nd if) " << *pos << std::endl;
+	{
+            Chunk num_to_insert = pend[i];
+
+            size_t jIndex = num_to_insert.id;
+            size_t bound = main.size();
+            if (jIndex + 1 < main.size() + pend.size())
+	    {
+                size_t anchorId = jIndex + 1;
+                for (size_t m = 0; m < main.size(); ++m)
+		{
+                    if (main[m].id == anchorId) 
+		    {
+			    bound = m; 
+			    break;
+		    }
+                }
+            }
+
+            auto pos = std::lower_bound
+		(
+                main.begin(), main.begin() + std::min(bound, main.size()), 
+                num_to_insert, comp
+            );
+
+            std::cout << "Inserting leftover " << num_to_insert.value 
+                      << " before bound=" << bound << std::endl;
+
+            main.insert(pos, num_to_insert);
         }
     }
 }
@@ -58,57 +116,53 @@ void mainPendBuild(std::vector<int>& numbers, size_t largestBlock)
     std::vector<int> current = numbers;
     while (block >= 1) 
     {
-        std::vector<int> blockEnds;
+        std::vector<Chunk> blockEnds;
         for (size_t i = block - 1; i < current.size(); i += block)
-            blockEnds.push_back(current[i]);
+            blockEnds.push_back({ current[i], blockEnds.size() });
 
-        std::vector<int> main, pend;
-        if (blockEnds.size() >= 2) 
-        {
+        std::vector<Chunk> main, pend;
+        if (blockEnds.size() >= 2)
+	{
             main.push_back(blockEnds[0]);
             main.push_back(blockEnds[1]);
 
-            for (size_t i = 2; i + 1 < blockEnds.size(); i += 2) 
-            {
+            for (size_t i = 2; i + 1 < blockEnds.size(); i += 2)
+	    {
                 pend.push_back(blockEnds[i]);
                 main.push_back(blockEnds[i+1]);
             }
             if (blockEnds.size() % 2 != 0)
                 pend.push_back(blockEnds.back());
         } 
-        else if (blockEnds.size() == 1) 
-        {
+	else if (blockEnds.size() == 1)
+	{
             main.push_back(blockEnds[0]);
         }
-        std::cout << "main before insertion: " << std::endl;
-        for (auto v : main) 
-            std::cout << v << " ";
+
+        std::cout << "main before insertion: ";
+        for (auto& v : main) std::cout << v.value << " ";
+        std::cout << "\npend before insertion: ";
+        for (auto& v : pend) std::cout << v.value << " ";
         std::cout << std::endl;
-        std::cout << "pend before insertion: " << std::endl;
-        for (auto v : pend) 
-            std::cout << v << " ";
-        std::cout << std::endl;
+
         insertPendIntoMain(main, pend);
-        std::cout << "main after insertion: " << std::endl;
-        for (auto v : main) 
-            std::cout << v << " "; 
-        std::cout << std::endl;
-        std::cout << "pend after insertion: " << std::endl;
-        for (auto v : pend) 
-            std::cout << v << " ";
-        std::cout << std::endl;
-        for (size_t k = 0; k < main.size(); ++k) 
-        {
-            current[block - 1 + k * block] = main[k];
-        }
-        if (block == 1) 
-            break;
+
+        std::cout << "main after insertion: ";
+        for (auto& v : main) std::cout << v.value << " ";
+        std::cout << "\npend after insertion: ";
+        for (auto& v : pend) std::cout << v.value << " ";
+        std::cout << "\n";
+
+        for (size_t k = 0; k < main.size(); ++k)
+            current[block - 1 + k * block] = main[k].value;
+
+        if (block == 1) break;
         block /= 2;
     }
     numbers = current;
+
     std::cout << "Sorting done: ";
-    for (auto a : numbers)
-        std::cout << a << " ";
+    for (auto a : numbers) std::cout << a << " ";
     std::cout << std::endl;
 }
 
@@ -118,6 +172,7 @@ void mergeSort(std::vector<int>& numbers, size_t elemSize, size_t& largestBlock)
     size_t numElems = numbers.size() / elemSize;
     if (numElems % 2 != 0)
         isOdd = 1;
+    (void)isOdd;
     if (elemSize == 1)
     {
         for (size_t i = 0; i + 1 < numbers.size(); i += 2)
