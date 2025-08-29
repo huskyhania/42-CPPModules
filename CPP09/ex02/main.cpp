@@ -37,7 +37,7 @@ void insertPendIntoMain(std::vector<Chunk>& main, std::vector<Chunk>& pend)
     {
         size_t index = J - 1;
         if (!inserted[index]) 
-	{
+	    {
             Chunk num_to_insert = pend[index];
 
             // find its original position in pend by ID
@@ -46,23 +46,19 @@ void insertPendIntoMain(std::vector<Chunk>& main, std::vector<Chunk>& pend)
             // bound = position of next anchor (id=jIndex+1) in main
             size_t bound = main.size();
             if (jIndex + 1 < main.size() + pend.size()) 
-	    {
+	        {
                 size_t anchorId = jIndex + 1;
                 for (size_t m = 0; m < main.size(); ++m)
-		{
+		        {
                     if (main[m].id == anchorId) 
-		    {
-			    bound = m; 
-			    break; 
-		    }
+                    {
+                        bound = m; 
+                        break; 
+                    }
                 }
             }
 
-            auto pos = std::lower_bound
-		    (
-                main.begin(), main.begin() + std::min(bound, main.size()), 
-                num_to_insert, comp
-            );
+            auto pos = std::lower_bound(main.begin(), main.begin() + std::min(bound, main.size()), num_to_insert, comp);
 
             std::cout << "Inserting " << num_to_insert.value 
                       << " before bound=" << bound << std::endl;
@@ -78,33 +74,28 @@ void insertPendIntoMain(std::vector<Chunk>& main, std::vector<Chunk>& pend)
     for (size_t i = 0; i < pend.size(); ++i) 
     {
         if (!inserted[i]) 
-	{
+        {
             Chunk num_to_insert = pend[i];
 
             size_t jIndex = num_to_insert.id;
             size_t bound = main.size();
             if (jIndex + 1 < main.size() + pend.size())
-	    {
+            {
                 size_t anchorId = jIndex + 1;
                 for (size_t m = 0; m < main.size(); ++m)
-		{
+                {
                     if (main[m].id == anchorId) 
-		    {
-			    bound = m; 
-			    break;
-		    }
+                    {
+                        bound = m; 
+                        break;
+                    }
                 }
             }
 
-            auto pos = std::lower_bound
-		(
-                main.begin(), main.begin() + std::min(bound, main.size()), 
-                num_to_insert, comp
-            );
+            auto pos = std::lower_bound(main.begin(), main.begin() + std::min(bound, main.size()), num_to_insert, comp);
 
             std::cout << "Inserting leftover " << num_to_insert.value 
-                      << " before bound=" << bound << std::endl;
-
+                    << " before bound=" << bound << std::endl;
             main.insert(pos, num_to_insert);
         }
     }
@@ -122,20 +113,20 @@ void mainPendBuild(std::vector<int>& numbers, size_t largestBlock)
 
         std::vector<Chunk> main, pend;
         if (blockEnds.size() >= 2)
-	{
+	    {
             main.push_back(blockEnds[0]);
             main.push_back(blockEnds[1]);
 
             for (size_t i = 2; i + 1 < blockEnds.size(); i += 2)
-	    {
+	        {
                 pend.push_back(blockEnds[i]);
                 main.push_back(blockEnds[i+1]);
             }
             if (blockEnds.size() % 2 != 0)
                 pend.push_back(blockEnds.back());
         } 
-	else if (blockEnds.size() == 1)
-	{
+	    else if (blockEnds.size() == 1)
+	    {
             main.push_back(blockEnds[0]);
         }
 
@@ -149,8 +140,6 @@ void mainPendBuild(std::vector<int>& numbers, size_t largestBlock)
 
         std::cout << "main after insertion: ";
         for (auto& v : main) std::cout << v.value << " ";
-        std::cout << "\npend after insertion: ";
-        for (auto& v : pend) std::cout << v.value << " ";
         std::cout << "\n";
 
         for (size_t k = 0; k < main.size(); ++k)
