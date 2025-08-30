@@ -6,6 +6,19 @@
 //validate input (positive ints)
 static size_t comparisons = 0;
 
+void printBlocks(const std::vector<int>& vec, size_t elemSize, const std::string& name) {
+    std::cout << name << ": ";
+    for (size_t i = 0; i < vec.size(); i += elemSize) {
+        std::cout << "[";
+        for (size_t j = 0; j < elemSize && i + j < vec.size(); ++j) {
+            std::cout << vec[i + j];
+            if (j + 1 < elemSize) std::cout << ",";
+        }
+        std::cout << "] ";
+    }
+    std::cout << std::endl;
+}
+
 unsigned int jacobsthal_number(unsigned int num)
 {
     if (num == 0) 
@@ -75,12 +88,13 @@ void insertPendIntoMain(std::vector<int>& main,
         auto it = std::upper_bound(mainEnds.begin(), mainEnds.end(), value, comp);
         size_t insertIdx = it - mainEnds.begin();
         auto pos = main.begin() + insertIdx * elemSize;
-
+	std::cout << "inserting: " << value << " of index " << idx << " at position " << *pos << std::endl;
         main.insert(pos, unitStart, unitEnd);
         inserted[idx] = true;
     };
-
-
+    std::cout << "Before insertion:" << std::endl;
+    printBlocks(main, elemSize, "main");
+    printBlocks(pend, elemSize, "pend");
     for (int idx : jacobs_sequence) 
     {
         if (idx >= 2 && static_cast<size_t>(idx) < pendElems.size())
@@ -96,10 +110,10 @@ void mergeInsertSort(std::vector<int>& numbers, size_t elemSize)
 {
     if (elemSize == 0 || numbers.size() / elemSize < 2) 
         return;
-    bool isOdd = 0;
-    size_t numElems = numbers.size() / elemSize;
-    if (numElems % 2 != 0)
-        isOdd = 1;
+    //bool isOdd = 0;
+    //size_t numElems = numbers.size() / elemSize;
+    //if (numElems % 2 != 0)
+    //    isOdd = 1;
  
     for (size_t i = 0; i + elemSize * 2 <= numbers.size(); i += elemSize * 2) 
     {
