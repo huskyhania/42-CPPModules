@@ -15,9 +15,42 @@ unsigned int jacobsthal_number(unsigned int num)
     return jacobsthal_number(num - 1) + 2 * jacobsthal_number(num - 2);
 }
 
-void insertPendIntoMain(std::vector<int>& main, std::vector<int>& pend) 
+std::vector<int> jacobsthalSequence(size_t n) 
 {
-    std::vector<bool> inserted(pend.size(), false);
+    std::vector<int> seq;
+    if (n == 0) 
+        return seq;
+
+    std::vector<int> j = {0, 1};
+    while (j.back() < static_cast<int>(n))
+        j.push_back(j[j.size() - 1] + 2 * j[j.size() - 2]);
+    j.pop_back();
+
+    for (size_t k = 1; k < j.size(); ++k) 
+    {
+        for (int i = j[k]; i > j[k - 1]; --i) 
+        {
+            if (i - 1 < static_cast<int>(n))
+                seq.push_back(i - 1);
+        }
+    }
+    return seq;
+}
+
+void insertPendIntoMain(std::vector<int>& main,
+    std::vector<int>& pend, std::vector<int>& struggler, 
+    size_t elemSize, std::vector<int>& numbers) 
+{
+    if (elemSize == 0 || pend.size() < elemSize) 
+        return;
+    
+    
+    std::vector<int> pendElems;
+    for (size_t i = 0; i + elemSize <= pend.size(); i += elemSize)
+        pendElems.push_back(i);
+    std::vector<bool> inserted(pendElems.size(), false);
+    std::vector<int> jacobs_sequence = jacobsthalSequence(pendElems.size());
+    
 
     auto comp = [&](int a, int b) 
     {
@@ -25,137 +58,84 @@ void insertPendIntoMain(std::vector<int>& main, std::vector<int>& pend)
         return a < b;
     };
 
-    size_t k = 1;
-    size_t J = jacobsthal_number(k);
-    while (J <= pend.size())
+    auto insertOne = [&](size_t idx) 
     {
-        size_t index = J - 1;
-        if (!inserted[index]) 
-        {
-            auto pos = std::lower_bound(main.begin(), main.end(), pend[index], comp);
-            std::cout << "i'm inserting " << pend[index] << " at position with jacobs " << *pos << std::endl;
-            main.insert(pos, pend[index]);
-            inserted[index] = true;
-        }
-        k++;
-        J = jacobsthal_number(k);
-    }
+        size_t startIndex = pendElems[idx];
+        auto unitStart = pend.begin() + startIndex;
+        auto unitEnd   = unitStart + elemSize;
+        int value = *(unitEnd - 1);
 
-    for (size_t i = 0; i < pend.size(); ++i) 
+        // find insertion position in main
+        std::vector<int> mainEnds;
+        for (size_t i = 0; i + elemSize <= main.size(); i += elemSize)
+            mainEnds.push_back(main[i + elemSize - 1]);
+
+        auto it = std::upper_bound(mainEnds.begin(), mainEnds.end(), value, comp);
+        size_t insertIdx = it - mainEnds.begin();
+        auto pos = main.begin() + insertIdx * elemSize;
+
+        main.insert(pos, unitStart, unitEnd);
+        inserted[idx] = true;
+    };
+
+
+    for (int idx : jacobs_sequence) 
     {
-        if (!inserted[i]) 
-        {
-            auto pos = std::lower_bound(main.begin(), main.end(), pend[i], comp);
-            main.insert(pos, pend[i]);
-            std::cout << "i'm inserting " << pend[i] << " at position (2nd if) " << *pos << std::endl;
-        }
+        if (idx >= 0 && static_cast<size_t>(idx) < pendElems.size())
+            insertOne(idx);
     }
+    for (size_t i = 0; i < pendElems.size(); ++i)
+        if (!inserted[i]) insertOne(i);
+    main.insert(main.end(), struggler.begin(), struggler.end());
+    numbers = main; 
 }
 
-void mainPendBuild(std::vector<int>& numbers, size_t largestBlock)
+void mergeInsertSort(std::vector<int>& numbers, size_t elemSize)
 {
-    size_t block = largestBlock;
-    std::vector<int> current = numbers;
-    while (block >= 1) 
-    {
-        std::vector<int> blockEnds;
-        for (size_t i = block - 1; i < current.size(); i += block)
-            blockEnds.push_back(current[i]);
-
-        std::vector<int> main, pend;
-        if (blockEnds.size() >= 2) 
-        {
-            main.push_back(blockEnds[0]);
-            main.push_back(blockEnds[1]);
-
-            for (size_t i = 2; i + 1 < blockEnds.size(); i += 2) 
-            {
-                pend.push_back(blockEnds[i]);
-                main.push_back(blockEnds[i+1]);
-            }
-            if (blockEnds.size() % 2 != 0)
-                pend.push_back(blockEnds.back());
-        } 
-        else if (blockEnds.size() == 1) 
-        {
-            main.push_back(blockEnds[0]);
-        }
-        std::cout << "main before insertion: " << std::endl;
-        for (auto v : main) 
-            std::cout << v << " ";
-        std::cout << std::endl;
-        std::cout << "pend before insertion: " << std::endl;
-        for (auto v : pend) 
-            std::cout << v << " ";
-        std::cout << std::endl;
-        insertPendIntoMain(main, pend);
-        std::cout << "main after insertion: " << std::endl;
-        for (auto v : main) 
-            std::cout << v << " "; 
-        std::cout << std::endl;
-        std::cout << "pend after insertion: " << std::endl;
-        for (auto v : pend) 
-            std::cout << v << " ";
-        std::cout << std::endl;
-        for (size_t k = 0; k < main.size(); ++k) 
-        {
-            current[block - 1 + k * block] = main[k];
-        }
-        if (block == 1) 
-            break;
-        block /= 2;
-    }
-    numbers = current;
-    std::cout << "Sorting done: ";
-    for (auto a : numbers)
-        std::cout << a << " ";
-    std::cout << std::endl;
-}
-
-void mergeSort(std::vector<int>& numbers, size_t elemSize, size_t& largestBlock)
-{
+    if (elemSize == 0 || numbers.size() / elemSize < 2) 
+        return;
     bool isOdd = 0;
     size_t numElems = numbers.size() / elemSize;
     if (numElems % 2 != 0)
         isOdd = 1;
-    if (elemSize == 1)
+ 
+    for (size_t i = 0; i + elemSize * 2 <= numbers.size(); i += elemSize * 2) 
     {
-        for (size_t i = 0; i + 1 < numbers.size(); i += 2)
+        size_t leftEnd  = i + elemSize - 1;
+        size_t rightEnd = i + 2 * elemSize - 1;
+        comparisons++;
+        if (numbers[leftEnd] > numbers[rightEnd])
         {
-            comparisons++;
-            if (numbers[i] > numbers[i + 1])
-            {
-                std::swap(numbers[i], numbers[i + 1]);
-            }
-        }
-    } 
-    else 
-    {
-        for (size_t i = 0; i + elemSize * 2 <= numbers.size(); i += elemSize * 2) 
-        {
-            size_t leftEnd  = i + elemSize - 1;
-            size_t rightEnd = i + 2 * elemSize - 1;
-            // std::cout << "numbers compared: " << numbers[leftEnd] << " and " 
-            // << numbers[rightEnd] << std::endl;
-            comparisons++;
-            if (numbers[leftEnd] > numbers[rightEnd])
-            {
-                for (size_t j = 0; j < elemSize; ++j) {
-                    std::swap(numbers[i + j], numbers[i + elemSize + j]);
-                }
-            }
+            for (size_t j = 0; j < elemSize; ++j)
+                std::swap(numbers[i + j], numbers[i + elemSize + j]);
         }
     }
     // std::cout << "After elemSize " << elemSize << ": ";
     // for (int n : numbers) std::cout << n << " ";
     // std::cout << "\n";
-    if (elemSize * 2 * 2 <= numbers.size())
+    mergeInsertSort(numbers, elemSize * 2);
+    //initial block swapping done (size of elems increased from 1 to biggest possible)
+
+    size_t blocks = numbers.size() / elemSize;
+    std::vector<int> main, pend;
+    
+    //adding b1 and a1 to main
+    main.insert(main.end(), numbers.begin(), numbers.begin() + elemSize);
+    main.insert(main.end(), numbers.begin() + elemSize, numbers.begin() + 2 * elemSize);
+    for (size_t i = 2; i < blocks; ++i)
     {
-        // std::cout << "recursive call for elem size: " << elemSize * 2 << std::endl;
-        mergeSort(numbers, elemSize * 2, largestBlock);
+        size_t index = i * elemSize;
+        if (i % 2 == 1)
+            main.insert(main.end(), numbers.begin() + index, numbers.begin() + index + elemSize);
+        else
+            pend.insert(pend.end(), numbers.begin() + index, numbers.begin() + index + elemSize);
     }
-    else
-        largestBlock = elemSize;
+    //remaining numbers
+    std::vector<int>struggler(numbers.begin() + blocks * elemSize, numbers.end());
+
+    //insertion part
+    insertPendIntoMain(main, pend, struggler, elemSize, numbers);
+
 }
 
 int main(int argc, char **argv)
@@ -182,9 +162,13 @@ int main(int argc, char **argv)
             std::cout << item << " ";
         }
         std::cout << std::endl;
-        size_t largestBlock = 0;
-        mergeSort(orgNumbers, 1, largestBlock);
-        mainPendBuild(orgNumbers, largestBlock);
+        mergeInsertSort(orgNumbers, 1);
+        std::cout << "Sorting done: ";
+        for (const auto& item : orgNumbers)
+        {
+            std::cout << item << " ";
+        }
+        std::cout << std::endl;
         std::cout << "\033[31mTotal comparisons: " << comparisons << std::endl;
     }
     catch(std::exception &e)
