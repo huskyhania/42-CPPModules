@@ -26,7 +26,7 @@ std::vector<int> jacobsthalSequence(size_t n)
         j.push_back(j[j.size() - 1] + 2 * j[j.size() - 2]);
     j.pop_back();
 
-    for (size_t k = 1; k < j.size(); ++k) 
+    for (size_t k = 3; k < j.size(); ++k) 
     {
         for (int i = j[k]; i > j[k - 1]; --i) 
         {
@@ -50,7 +50,9 @@ void insertPendIntoMain(std::vector<int>& main,
         pendElems.push_back(i);
     std::vector<bool> inserted(pendElems.size(), false);
     std::vector<int> jacobs_sequence = jacobsthalSequence(pendElems.size());
-    
+    std::cout << "generated jacobsthal seq: ";
+    for (int n : jacobs_sequence) std::cout << n << " ";
+    std::cout << std::endl;
 
     auto comp = [&](int a, int b) 
     {
@@ -81,7 +83,7 @@ void insertPendIntoMain(std::vector<int>& main,
 
     for (int idx : jacobs_sequence) 
     {
-        if (idx >= 0 && static_cast<size_t>(idx) < pendElems.size())
+        if (idx >= 2 && static_cast<size_t>(idx) < pendElems.size())
             insertOne(idx);
     }
     for (size_t i = 0; i < pendElems.size(); ++i)
