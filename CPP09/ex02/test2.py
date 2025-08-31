@@ -5,8 +5,10 @@ import re
 
 
 def generate_numbers(n, low=0, high=100):
-    """Generate a list of n random integers between low and high."""
-    return [random.randint(low, high) for _ in range(n)]
+    """Generate a list of n unique random integers between low and high."""
+    if n > (high - low + 1):
+        raise ValueError(f"Cannot generate {n} unique numbers between {low} and {high}")
+    return random.sample(range(low, high + 1), n)  # guarantees uniqueness
 
 def is_sorted(nums):
     """Check if a list is sorted in non-decreasing order."""
@@ -71,3 +73,4 @@ if __name__ == "__main__":
     runs = int(sys.argv[3]) if len(sys.argv) > 3 else 5
 
     run_test(n, program, runs)
+

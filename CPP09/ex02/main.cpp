@@ -92,6 +92,47 @@ std::vector<int> jacobsthalInsertionOrder_pend0(size_t pendCount)
     return res;
 }
 
+size_t jacobsthalSearchLimit(size_t pendIdx) 
+{
+    // idx = 0-based pend index in Jacobsthal insertion order
+    uint64_t J0 = 0, J1 = 1;
+    size_t k = 1;
+    while (true) 
+    {
+        uint64_t J_next = J1 + 2 * J0; // next Jacobsthal
+        if (J_next > pendIdx + 1) 
+            break;
+        J0 = J1;
+        J1 = J_next;
+        k++;
+    }
+    return (1ULL << k) - 1; // 2^k - 1
+}
+
+size_t nextPowerOf2(size_t x) 
+{
+    if (x == 0) return 1;
+    --x;
+    x |= x >> 1;
+    x |= x >> 2;
+    x |= x >> 4;
+    x |= x >> 8;
+    x |= x >> 16;
+    if constexpr (sizeof(size_t) > 4)
+        x |= x >> 32;
+    return x + 1;
+}
+
+size_t jacobsthalSearchLimit(size_t pendIdx, const std::vector<uint64_t>& J) 
+{
+    size_t idx1_based = pendIdx + 1;
+    for (size_t k = 1; k < J.size(); ++k) {
+        if (idx1_based <= J[k])
+            return static_cast<size_t>(J[k] + J[k-1] - 1);
+    }
+    return pendIdx + 1;
+}
+
 
 void insertPendIntoMain(std::vector<int>& main,
     std::vector<int>& pend, std::vector<int>& struggler, 
@@ -113,7 +154,8 @@ void insertPendIntoMain(std::vector<int>& main,
 
     // Convert to pend indices (0-based)
     std::vector<int> jacobs_sequence;
-    for (int bIndex : bOrder) {
+    for (int bIndex : bOrder) 
+    {
         int pendIdx = bIndex - 2;
         if (pendIdx >= 0 && static_cast<size_t>(pendIdx) < pendElems.size())
             jacobs_sequence.push_back(pendIdx);
@@ -142,10 +184,15 @@ void insertPendIntoMain(std::vector<int>& main,
         for (size_t i = 0; i + elemSize <= main.size(); i += elemSize)
             mainEnds.push_back(main[i + elemSize - 1]);
 
-        auto it = std::upper_bound(mainEnds.begin(), mainEnds.end(), value, comp);
+        size_t search_end = std::min(mainEnds.size(), jacobsthalSearchLimit(idx));
+        //size_t search_end = jacobsthalSearchLimit(idx);
+        std::cout << "Index: " << idx << std::endl;
+        std::cout << "Search end: " << search_end << std::endl;
+        std::cout << "Jacobsthal search limit" << jacobsthalSearchLimit(idx) << std::endl;
+        auto it = std::upper_bound(mainEnds.begin(), mainEnds.begin() + search_end, value, comp);
         size_t insertIdx = it - mainEnds.begin();
         auto pos = main.begin() + insertIdx * elemSize;
-	std::cout << "inserting: " << value << " of index " << idx << " at position " << *pos << std::endl;
+	    std::cout << "inserting: " << value << " of index " << idx << " before its matching a " << *(main.begin() + search_end) << std::endl;
         main.insert(pos, unitStart, unitEnd);
         inserted[idx] = true;
     };
