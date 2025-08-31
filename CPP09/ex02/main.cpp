@@ -111,29 +111,16 @@ size_t jacobsthalSearchLimit(size_t pendIdx)
     return (1ULL << k) - 1; // 2^k - 1
 }
 
-size_t nextPowerOf2(size_t x) 
-{
-    if (x == 0) return 1;
-    --x;
-    x |= x >> 1;
-    x |= x >> 2;
-    x |= x >> 4;
-    x |= x >> 8;
-    x |= x >> 16;
-    if constexpr (sizeof(size_t) > 4)
-        x |= x >> 32;
-    return x + 1;
-}
 
-size_t jacobsthalSearchLimit(size_t pendIdx, const std::vector<uint64_t>& J) 
-{
-    size_t idx1_based = pendIdx + 1;
-    for (size_t k = 1; k < J.size(); ++k) {
-        if (idx1_based <= J[k])
-            return static_cast<size_t>(J[k] + J[k-1] - 1);
-    }
-    return pendIdx + 1;
-}
+// size_t jacobsthalSearchLimit(size_t pendIdx, const std::vector<uint64_t>& J) 
+// {
+//     size_t idx1_based = pendIdx + 1;
+//     for (size_t k = 1; k < J.size(); ++k) {
+//         if (idx1_based <= J[k])
+//             return static_cast<size_t>(J[k] + J[k-1] - 1);
+//     }
+//     return pendIdx + 1;
+// }
 
 
 void insertPendIntoMain(std::vector<int>& main,
@@ -190,7 +177,7 @@ void insertPendIntoMain(std::vector<int>& main,
         //size_t search_end = jacobsthalSearchLimit(idx);
         std::cout << "Index: " << idx << std::endl;
         std::cout << "Search end: " << search_end << std::endl;
-        std::cout << "Jacobsthal search limit" << jacobsthalSearchLimit(idx) << std::endl;
+        std::cout << "Jacobsthal search limit: " << jacobsthalSearchLimit(idx) << std::endl;
         std::vector<int>::iterator it;
         if (jacobs_flag)
             it = std::upper_bound(mainEnds.begin(), mainEnds.begin() + search_end, value, comp);
@@ -199,26 +186,31 @@ void insertPendIntoMain(std::vector<int>& main,
         
         size_t insertIdx = it - mainEnds.begin();
         auto pos = main.begin() + insertIdx * elemSize;
-	    // std::cout << "inserting: " << value << " of index " << idx << " before its matching a " << *(main.begin() + search_end) << std::endl;
-        if (search_end < mainEnds.size())
-            std::cout << "inserting: " << value << " of index " << idx 
-                    << " before block ending " << mainEnds[search_end] << std::endl;
-        else
-            std::cout << "inserting: " << value << " of index " << idx 
-                    << " at end of main" << std::endl;
+        // if (search_end < mainEnds.size())
+        //     std::cout << "inserting: " << value << " of index " << idx 
+        //             << " before block ending " << mainEnds[search_end] << std::endl;
+        // else
+        //     std::cout << "inserting: " << value << " of index " << idx 
+        //             << " at end of main" << std::endl;
         main.insert(pos, unitStart, unitEnd);
         inserted[idx] = true;
     };
-    std::cout << "Before insertion:" << std::endl;
+    //std::cout << "Before insertion:" << std::endl;
     printBlocks(main, elemSize, "main");
     printBlocks(pend, elemSize, "pend");
     for (int idx : jacobs_sequence) 
     {
-        std::cout << "insertion happens from jacobs call\n";
+        //std::cout << "insertion happens from jacobs call\n";
         insertOne(idx, 1);;
     }
     for (size_t i = 0; i < pendElems.size(); ++i)
-        if (!inserted[i]) insertOne(i, 0);
+    {
+        if (!inserted[i])
+        {
+            //std::cout << "insertion outside of jacobs\n"; 
+            insertOne(i, 0);
+        }
+    }
     main.insert(main.end(), struggler.begin(), struggler.end());
     numbers = main; 
 }
@@ -227,10 +219,6 @@ void mergeInsertSort(std::vector<int>& numbers, size_t elemSize)
 {
     if (elemSize == 0 || numbers.size() / elemSize < 2) 
         return;
-    //bool isOdd = 0;
-    //size_t numElems = numbers.size() / elemSize;
-    //if (numElems % 2 != 0)
-    //    isOdd = 1;
  
     for (size_t i = 0; i + elemSize * 2 <= numbers.size(); i += elemSize * 2) 
     {
@@ -243,11 +231,8 @@ void mergeInsertSort(std::vector<int>& numbers, size_t elemSize)
                 std::swap(numbers[i + j], numbers[i + elemSize + j]);
         }
     }
-    // std::cout << "After elemSize " << elemSize << ": ";
-    // for (int n : numbers) std::cout << n << " ";
-    // std::cout << "\n";
+
     mergeInsertSort(numbers, elemSize * 2);
-    //initial block swapping done (size of elems increased from 1 to biggest possible)
 
     size_t blocks = numbers.size() / elemSize;
     std::vector<int> main, pend;
@@ -263,10 +248,9 @@ void mergeInsertSort(std::vector<int>& numbers, size_t elemSize)
         else
             pend.insert(pend.end(), numbers.begin() + index, numbers.begin() + index + elemSize);
     }
-    //remaining numbers
+
     std::vector<int>struggler(numbers.begin() + blocks * elemSize, numbers.end());
 
-    //insertion part
     insertPendIntoMain(main, pend, struggler, elemSize, numbers);
 
 }
