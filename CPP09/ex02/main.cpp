@@ -63,6 +63,8 @@ std::vector<int> jacobsthalInsertionOrder_bIndices(size_t pendCount)
     {
         int start = static_cast<int>(J[k]);
         int prev  = static_cast<int>(J[k - 1]);
+        if (start > static_cast<int>(pendCount + 1))
+            break; 
         for (int i = start; i > prev; --i) 
         {
             // i is a b-index (2..), only include if it exists in our pend range
@@ -73,11 +75,11 @@ std::vector<int> jacobsthalInsertionOrder_bIndices(size_t pendCount)
 
     // Finally append any remaining b-indices (2 .. n+1) that were not included yet,
     // in increasing order so the leftovers (like the highest b) come last.
-    for (int i = 2; i <= static_cast<int>(pendCount + 1); ++i) 
-    {
-        if (std::find(order.begin(), order.end(), i) == order.end())
-            order.push_back(i);
-    }
+    // for (int i = 2; i <= static_cast<int>(pendCount + 1); ++i) 
+    // {
+    //     if (std::find(order.begin(), order.end(), i) == order.end())
+    //         order.push_back(i);
+    // }
 
     return order;
 }
@@ -172,7 +174,7 @@ void insertPendIntoMain(std::vector<int>& main,
         return a < b;
     };
 
-    auto insertOne = [&](size_t idx) 
+    auto insertOne = [&](size_t idx, int jacobs_flag) 
     {
         size_t startIndex = pendElems[idx];
         auto unitStart = pend.begin() + startIndex;
@@ -189,10 +191,21 @@ void insertPendIntoMain(std::vector<int>& main,
         std::cout << "Index: " << idx << std::endl;
         std::cout << "Search end: " << search_end << std::endl;
         std::cout << "Jacobsthal search limit" << jacobsthalSearchLimit(idx) << std::endl;
-        auto it = std::upper_bound(mainEnds.begin(), mainEnds.begin() + search_end, value, comp);
+        std::vector<int>::iterator it;
+        if (jacobs_flag)
+            it = std::upper_bound(mainEnds.begin(), mainEnds.begin() + search_end, value, comp);
+        else
+            it = std::upper_bound(mainEnds.begin(), mainEnds.end(), value, comp);
+        
         size_t insertIdx = it - mainEnds.begin();
         auto pos = main.begin() + insertIdx * elemSize;
-	    std::cout << "inserting: " << value << " of index " << idx << " before its matching a " << *(main.begin() + search_end) << std::endl;
+	    // std::cout << "inserting: " << value << " of index " << idx << " before its matching a " << *(main.begin() + search_end) << std::endl;
+        if (search_end < mainEnds.size())
+            std::cout << "inserting: " << value << " of index " << idx 
+                    << " before block ending " << mainEnds[search_end] << std::endl;
+        else
+            std::cout << "inserting: " << value << " of index " << idx 
+                    << " at end of main" << std::endl;
         main.insert(pos, unitStart, unitEnd);
         inserted[idx] = true;
     };
@@ -201,10 +214,11 @@ void insertPendIntoMain(std::vector<int>& main,
     printBlocks(pend, elemSize, "pend");
     for (int idx : jacobs_sequence) 
     {
-        insertOne(idx);
+        std::cout << "insertion happens from jacobs call\n";
+        insertOne(idx, 1);;
     }
     for (size_t i = 0; i < pendElems.size(); ++i)
-        if (!inserted[i]) insertOne(i);
+        if (!inserted[i]) insertOne(i, 0);
     main.insert(main.end(), struggler.begin(), struggler.end());
     numbers = main; 
 }
