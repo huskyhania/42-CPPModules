@@ -4,9 +4,9 @@ all: $(NAME)
 CPP := c++
 FLAGS := -Wall -Wextra -Werror -std=c++17
 
-SOURCE := main.cpp 
+SOURCE := main.cpp PmergeMe.cpp
 OBJ := $(SOURCE:.cpp=.o)
-#HEADERS := RPN.hpp
+HEADERS := PmergeMe.hpp
 
 $(NAME) : $(OBJ)
 	$(CPP) $(FLAGS) $(OBJ) -o $(NAME) 
