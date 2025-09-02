@@ -23,7 +23,7 @@ void open_file(std::ifstream &file, const char *filename)
 {
 	file.open(filename);
 	if (!file.is_open())
-		throw(std::runtime_error("Error: No permissions to open file"));
+		throw(std::runtime_error("Error: Could not open file"));
 }
 
 
@@ -31,8 +31,9 @@ int main(int argc, char **argv)
 {
 	if (argc != 2)
 	{
-		std::cout << "\033[31mError: Wrong usage\033[0m" << std::endl;
+		std::cout << "Error: Could not open file" << std::endl;
 		std::cout << "Please run the program with one input file in txt format" << std::endl;
+		return 1;
 	}
 	std::ifstream csv_file;
 	std::ifstream input_file;

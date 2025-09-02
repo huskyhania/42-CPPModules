@@ -16,6 +16,18 @@ BitcoinExchange::BitcoinExchange(){}
 
 BitcoinExchange::~BitcoinExchange(){}
 
+BitcoinExchange::BitcoinExchange(const BitcoinExchange& org)
+    : database(org.database) {}
+
+BitcoinExchange &BitcoinExchange::operator=(const BitcoinExchange& org)
+{
+    if (this != &org)
+    {
+        database = org.database;
+    }
+    return *this;
+}
+
 bool BitcoinExchange::isDateValid(std::string &date)
 {
 	static const std::regex pattern(R"(^\d{4}-\d{2}-\d{2}$)");
@@ -99,12 +111,12 @@ void BitcoinExchange::useInput(std::ifstream& inputFile)
 			inputValue = std::stof(valueStr);
 			if (inputValue < 0)
 			{
-				std::cerr << "Error: not a positive number in line: " << line << std::endl;
+				std::cerr << "Error: not a positive number. " << std::endl;
 				continue;
 			}
 			if (inputValue > 1000)
 			{
-				std::cerr << "Error: too large a number in line: " << line << std::endl;
+				std::cerr << "Error: too large a number. " << std::endl;
 				continue;
 			}
 		}

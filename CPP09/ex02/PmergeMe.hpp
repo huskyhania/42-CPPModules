@@ -33,8 +33,8 @@ class PmergeMe
 		void printVec();
 		void printDeq();
 
-		const std::vector<int>& getNumbersVec() const;
-		const std::deque<int>& getNumbersDeq() const;
+		std::vector<int>& getNumbersVec();
+		std::deque<int>& getNumbersDeq();
 		size_t getComparisons() const;
 		size_t getVecSize() const;
 		size_t getDeqSize() const;
@@ -145,12 +145,6 @@ class PmergeMe
 		}
 
 		template <typename Container>
-		void addNumber(Container& container, int n)
-		{
-			container.push_back(n);
-		}
-
-		template <typename Container>
 		void printContainer(Container& container)
 		{
 			for (const auto& n : container)
@@ -159,3 +153,45 @@ class PmergeMe
 		}
 };
 
+template <typename Container>
+void addNumber(Container& container, int n)
+{
+	container.push_back(n);
+}
+
+template <typename Container, typename SortFunction>
+long long populateAndSort(Container& container, int argc, char** argv, SortFunction sortFunc, bool printBefore = false)
+{
+	auto start = std::chrono::steady_clock::now();
+
+	for (int i = 1; i < argc; ++i) 
+	{
+		try 
+		{
+			int num = std::stoi(argv[i]);
+			if (num < 0)
+				throw std::runtime_error(std::string("Negative number: ") + argv[i]);
+			addNumber(container, num);
+		}
+		catch (std::invalid_argument&) 
+		{
+        	throw std::runtime_error(std::string("Invalid number: ") + argv[i]);
+    	} 
+    	catch (std::out_of_range&) 
+		{
+        	throw std::runtime_error(std::string("Number out of range: ") + argv[i]);
+    	}
+	}
+	//change me
+	if (printBefore)
+	{
+		std::cout << "Before : ";
+		for (const auto& n : container)
+			std::cout << n << " ";
+		std::cout << std::endl;
+	}
+	sortFunc();
+
+	auto end = std::chrono::steady_clock::now();
+	return std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+}

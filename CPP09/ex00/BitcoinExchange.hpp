@@ -26,11 +26,12 @@ class BitcoinExchange
 	private:
 		std::map <std::string, float> database;
 		bool isDateValid(std::string &date);
-		bool isValueValid(std::string &value, float &output);
-
 	public:
 		BitcoinExchange();
 		~BitcoinExchange();
+		BitcoinExchange(const BitcoinExchange& org);
+		BitcoinExchange &operator=(const BitcoinExchange& org);
+
 		void useDatabase(std::ifstream& dataFile);
 		void useInput(std::ifstream& inputFile);
 };

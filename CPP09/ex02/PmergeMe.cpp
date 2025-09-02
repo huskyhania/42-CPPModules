@@ -32,12 +32,12 @@ size_t PmergeMe::getDeqSize() const
 	return numbersDeq.size();
 }
 
-const std::vector<int>& PmergeMe::getNumbersVec() const
+std::vector<int>& PmergeMe::getNumbersVec() 
 {
 	return numbers;
 }
 
-const std::deque<int>& PmergeMe::getNumbersDeq() const
+std::deque<int>& PmergeMe::getNumbersDeq()
 {
 	return numbersDeq;
 }
@@ -139,12 +139,12 @@ size_t PmergeMe::jacobsthalSearchLimit(size_t pendIndex)
 
 void PmergeMe::sortVector()
 {
-	mergeInsertSort<std::vector<int>>(numbers, 1);
+	mergeInsertSort(numbers, 1);
 }
 
 void PmergeMe::sortDeque()
 {
-	mergeInsertSort<std::deque<int>>(numbersDeq, 1);
+	mergeInsertSort(numbersDeq, 1);
 }
 
 PmergeMe::PmergeMe(const PmergeMe& org)
