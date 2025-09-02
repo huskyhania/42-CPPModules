@@ -16,13 +16,16 @@ class PmergeMe
 		size_t comparisons = 0;
 	public:
 		void printBlocks(const std::vector<int>& vec, size_t elemSize, const std::string& name);
+		std::vector<size_t>jacobsthalUpToSize(size_t n);
 		std::vector<int> pendInsertionOrder(size_t pendCount);
 		std::vector<int> indexInsertionOrder(size_t pendCount);
 		size_t jacobsthalSearchLimit(size_t pendIndex);
 
 		PmergeMe() = default;
+		PmergeMe(const PmergeMe& org);
 		~PmergeMe() = default;
-			//copy
+		PmergeMe &operator=(const PmergeMe& org);
+	
 			//asignement
 		void addNumberVec(int n);
 		void addNumberDeq(int n);
@@ -44,34 +47,16 @@ class PmergeMe
 			Container& pend, Container& struggler, 
     		size_t elemSize)
 		{
-			// std::cout << "Beginning of insertion logic: " << std::endl;
-			// printBlocks(main, elemSize, "main");
-			// printBlocks(pend, elemSize, "pend");
 			if (elemSize == 0 || pend.size() < elemSize) 
 				return;
-			
-			
+		
 			std::vector<int> pendBlocks;
 			for (size_t i = 0; i + elemSize <= pend.size(); i += elemSize)
 				pendBlocks.push_back(i);
 			std::vector<bool> inserted(pendBlocks.size(), false);
 			
-			std::vector<int> bOrder = pendInsertionOrder(pendBlocks.size());
+			std::vector<int> jacobs_sequence = indexInsertionOrder(pendBlocks.size());
 
-			// SIMPLIFY THIS !!!!!
-			// Convert to pend indices (0-based) 
-			std::vector<int> jacobs_sequence;
-			for (int bIndex : bOrder) 
-			{
-				int pendIdx = bIndex - 2;
-				if (pendIdx >= 0 && static_cast<size_t>(pendIdx) < pendBlocks.size())
-					jacobs_sequence.push_back(pendIdx);
-			}
-
-			// std::cout << "pend size: " << pendElems.size() << std::endl;
-			// std::cout << "generated jacobsthal seq: ";
-			// for (int n : jacobs_sequence) std::cout << n << " ";
-			// std::cout << std::endl;
 
 			auto comp = [&](int a, int b) 
 			{
@@ -91,11 +76,9 @@ class PmergeMe
 				for (size_t i = 0; i + elemSize <= main.size(); i += elemSize)
 					mainEnds.push_back(main[i + elemSize - 1]);
 
+				// calculate limit for the search
 				size_t search_end = std::min(mainEnds.size(), jacobsthalSearchLimit(index));
-				//size_t search_end = jacobsthalSearchLimit(idx);
-				// std::cout << "Index: " << idx << std::endl;
-				// std::cout << "Search end: " << search_end << std::endl;
-				// std::cout << "Jacobsthal search limit: " << jacobsthalSearchLimit(idx) << std::endl;
+			
 				std::vector<int>::iterator it;
 				if (jacobs_flag)
 					it = std::upper_bound(mainEnds.begin(), mainEnds.begin() + search_end, val, comp);
@@ -104,30 +87,17 @@ class PmergeMe
 				
 				size_t insertionPoint = it - mainEnds.begin();
 				auto pos = main.begin() + insertionPoint * elemSize;
-				// if (search_end < mainEnds.size())
-				//     std::cout << "inserting: " << value << " of index " << idx 
-				//             << " before block ending " << mainEnds[search_end] << std::endl;
-				// else
-				//     std::cout << "inserting: " << value << " of index " << idx 
-				//             << " at end of main" << std::endl;
 				main.insert(pos, elemBegin, elemEnd);
 				inserted[index] = true;
 			};
-			//std::cout << "Before insertion:" << std::endl;
-			//printBlocks(main, elemSize, "main");
-			//printBlocks(pend, elemSize, "pend");
 			for (int idx : jacobs_sequence) 
 			{
-				//std::cout << "insertion happens from jacobs call\n";
 				insertOne(idx, 1);;
 			}
 			for (size_t i = 0; i < pendBlocks.size(); ++i)
 			{
 				if (!inserted[i])
-				{
-					//std::cout << "insertion outside of jacobs\n"; 
 					insertOne(i, 0);
-				}
 			}
 			main.insert(main.end(), struggler.begin(), struggler.end());
 			sth = main;

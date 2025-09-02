@@ -77,66 +77,64 @@ void printBlocks(const std::vector<int>& vec, size_t elemSize, const std::string
     std::cout << std::endl;
 }
 
+std::vector<size_t> PmergeMe::jacobsthalUpToSize(size_t n)
+{
+    std::vector<size_t> J = {0, 1};
+    while (J.back() < n) 
+        J.push_back(J[J.size() - 1] + 2 * J[J.size() - 2]);
+    if (J.back() > n) 
+        J.pop_back();
+    return J;
+}
 
-// Generates insertion order as indexes of b (2 .. n+1).
+
+// Generates insertion order as indexes of b (b2 has index 0, b3 - 1, b4 - 2 etc.)
 // pendCount = number of pend elements (b2..b_{n+1}).
 // Example: pendCount = 5 -> pend are b2,b3,b4,b5,b6
-std::vector<int> PmergeMe::pendInsertionOrder(size_t pendCount) 
+std::vector<int> PmergeMe::indexInsertionOrder(size_t pendCount) 
 {
     std::vector<int> order;
-    if (pendCount == 0) return order;
+    if (pendCount == 0) 
+        return order;
 
-    // Build Jacobsthal numbers until >= (n+1), then drop the last if it's > n+1.
-    std::vector<uint64_t> J = {0, 1};
-    while (J.back() < static_cast<uint64_t>(pendCount + 1))
-        J.push_back(J[J.size() - 1] + 2ULL * J[J.size() - 2]);
-    if (J.back() > static_cast<uint64_t>(pendCount + 1))
-        J.pop_back();
+    auto J = jacobsthalUpToSize(pendCount + 1);
 
-    // For k = 3..max_k, insert b[start] .. b[prev+1] in reverse (start..prev+1)
     for (size_t k = 3; k < J.size(); ++k) 
     {
-        int start = static_cast<int>(J[k]);
-        int prev  = static_cast<int>(J[k - 1]);
-        if (start > static_cast<int>(pendCount + 1))
-            break; 
+        int start = static_cast<int>(J[k]) - 2;
+        int prev  = static_cast<int>(J[k - 1]) - 2;
+
+        if (start >= static_cast<int>(pendCount))
+            break;
+
         for (int i = start; i > prev; --i) 
         {
-            // i is a b-index (2..), only include if it exists in our pend range
-            if (i >= 2 && i <= static_cast<int>(pendCount + 1))
+            if (i >= 0 && i < static_cast<int>(pendCount))
                 order.push_back(i);
         }
     }
     return order;
 }
 
-// Convenience: return 0-based pend indices (0 = b2, 1 = b3, ...)
-std::vector<int> PmergeMe::indexInsertionOrder(size_t pendCount) 
-{
-    auto bIndices = pendInsertionOrder(pendCount);
-    std::vector<int> res;
-    res.reserve(bIndices.size());
-    for (int bi : bIndices) 
-        res.push_back(bi - 2); // convert b-index -> pend 0-based
-    return res;
-}
+// // Convenience: return 0-based pend indices (0 = b2, 1 = b3, ...)
+// std::vector<int> PmergeMe::indexInsertionOrder(size_t pendCount) 
+// {
+//     auto bIndices = pendInsertionOrder(pendCount);
+//     std::vector<int> res;
+//     res.reserve(bIndices.size());
+//     for (int bi : bIndices) 
+//         res.push_back(bi - 2);
+//     return res;
+// }
 
 //based on Jacobsthal number, calculate the upper bound for the search
 size_t PmergeMe::jacobsthalSearchLimit(size_t pendIndex) 
 {
-    // idx = 0-based pend index in Jacobsthal insertion order
-    uint64_t J0 = 0, J1 = 1;
-    size_t k = 1;
-    while (true) 
-    {
-        uint64_t J_next = J1 + 2 * J0; // next Jacobsthal
-        if (J_next > pendIndex + 1) 
-            break;
-        J0 = J1;
-        J1 = J_next;
-        k++;
-    }
-    return (1ULL << k) - 1; // 2^k - 1
+    if (pendIndex < 2)
+        return 3;
+    auto J = jacobsthalUpToSize(pendIndex + 1);
+    size_t k = J.size() - 1;
+    return (1ULL << k) - 1;   // 2^k - 1
 }
 
 void PmergeMe::sortVector()
@@ -148,3 +146,20 @@ void PmergeMe::sortDeque()
 {
 	mergeInsertSort<std::deque<int>>(numbersDeq, 1);
 }
+
+PmergeMe::PmergeMe(const PmergeMe& org)
+    : numbers(org.numbers), 
+    numbersDeq(org.numbersDeq), 
+    comparisons(org.comparisons) {}
+
+PmergeMe &PmergeMe::operator=(const PmergeMe& org)
+{
+    if (this != &org)
+    {
+        numbers = org.numbers;
+        numbersDeq = org.numbersDeq;
+        comparisons = org.comparisons;
+    }
+    return *this;
+}
+

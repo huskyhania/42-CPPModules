@@ -34,7 +34,7 @@ def run_test(n, program="./PmergeMe", runs=5):
             output = result.stdout.strip()
 
             # --- Extract "Sorting done" line ---
-            match_sorted = re.search(r"Sorting done:\s*(.*)", output)
+            match_sorted = re.search(r"After:\s*(.*)", output)
             if not match_sorted:
                 print("❌ 'Sorting done' not found in output")
                 continue
