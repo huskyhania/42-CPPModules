@@ -16,14 +16,14 @@
 void validate_extension(const char *filename, const char *ext)
 {
 	if (std::filesystem::path(filename).extension() != ext)
-		throw(std::runtime_error("Error: Invalid file extension"));
+		throw(std::runtime_error("Error: invalid file extension."));
 }
 
 void open_file(std::ifstream &file, const char *filename)
 {
 	file.open(filename);
 	if (!file.is_open())
-		throw(std::runtime_error("Error: Could not open file"));
+		throw(std::runtime_error("Error: could not open file."));
 }
 
 
@@ -31,8 +31,7 @@ int main(int argc, char **argv)
 {
 	if (argc != 2)
 	{
-		std::cout << "Error: Could not open file" << std::endl;
-		std::cout << "Please run the program with one input file in txt format" << std::endl;
+		std::cerr << "Error: could not open file." << std::endl;
 		return 1;
 	}
 	std::ifstream csv_file;
@@ -49,7 +48,11 @@ int main(int argc, char **argv)
 	}
 	catch (std::runtime_error &e)
 	{
-		std::cout << e.what() << std::endl;
+		std::cerr << e.what() << std::endl;
+	}
+	catch (...)
+	{
+		std::cerr << "Something went wrong..." << std::endl;
 	}
 	return 0;
 }

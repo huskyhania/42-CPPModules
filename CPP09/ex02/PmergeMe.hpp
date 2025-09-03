@@ -17,7 +17,6 @@ class PmergeMe
 	public:
 		void printBlocks(const std::vector<int>& vec, size_t elemSize, const std::string& name);
 		std::vector<size_t>jacobsthalUpToSize(size_t n);
-		std::vector<int> pendInsertionOrder(size_t pendCount);
 		std::vector<int> indexInsertionOrder(size_t pendCount);
 		size_t jacobsthalSearchLimit(size_t pendIndex);
 
@@ -26,7 +25,6 @@ class PmergeMe
 		~PmergeMe() = default;
 		PmergeMe &operator=(const PmergeMe& org);
 	
-			//asignement
 		void addNumberVec(int n);
 		void addNumberDeq(int n);
 
@@ -71,7 +69,7 @@ class PmergeMe
 				auto elemEnd   = elemBegin + elemSize;
 				int val = *(elemEnd - 1);
 
-				// find insertion position in main
+				// find insertion position in main (block based)
 				std::vector<int> mainEnds;
 				for (size_t i = 0; i + elemSize <= main.size(); i += elemSize)
 					mainEnds.push_back(main[i + elemSize - 1]);
@@ -85,6 +83,7 @@ class PmergeMe
 				else
 					it = std::upper_bound(mainEnds.begin(), mainEnds.end(), val, comp);
 				
+				// translate main blocks into position in actual main chain
 				size_t insertionPoint = it - mainEnds.begin();
 				auto pos = main.begin() + insertionPoint * elemSize;
 				main.insert(pos, elemBegin, elemEnd);
@@ -168,10 +167,18 @@ long long populateAndSort(Container& container, int argc, char** argv, SortFunct
 	{
 		try 
 		{
-			int num = std::stoi(argv[i]);
-			if (num < 0)
-				throw std::runtime_error(std::string("Negative number: ") + argv[i]);
-			addNumber(container, num);
+			if (argv[i][0] == '\0') 
+            	throw std::runtime_error("Empty argument");
+			std::istringstream iss(argv[i]);
+    		std::string token;
+			while (iss >> token)
+			{
+				if (!std::all_of(token.begin(), token.end(), ::isdigit))
+            		throw std::runtime_error("Invalid token: " + token);
+
+				int num = std::stoi(token);
+				addNumber(container, num);
+			}
 		}
 		catch (std::invalid_argument&) 
 		{
@@ -182,7 +189,10 @@ long long populateAndSort(Container& container, int argc, char** argv, SortFunct
         	throw std::runtime_error(std::string("Number out of range: ") + argv[i]);
     	}
 	}
-	//change me
+	if (container.size() > 10000)
+		throw std::runtime_error(std::string("Please don't try to break my program (max size 10k)"));
+	if (std::is_sorted(container.begin(), container.end()))
+		throw std::runtime_error(std::string("Why would you wanna sort a sorted container?"));
 	if (printBefore)
 	{
 		std::cout << "Before : ";

@@ -14,9 +14,9 @@
 
 int main(int argc, char **argv)
 {
-	if (argc < 2)
+	if (argc < 2 || argc > 2)
 	{
-		std::cout << "Usage error - use one argument only" << std::endl;
+		std::cerr << "Usage error - use one argument only" << std::endl;
 		return 1;
 	}
 	try
@@ -25,11 +25,11 @@ int main(int argc, char **argv)
 	}
 	catch (std::exception &e)
 	{
-		std::cout << e.what() << std::endl;
+		std::cerr << e.what() << std::endl;
 	}
 	catch (...)
 	{
-		std::cout << "Something went wrong..." << std::endl;
+		std::cerr << "Something went wrong..." << std::endl;
 	}
 	return 0;
 }

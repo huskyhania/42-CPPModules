@@ -14,16 +14,14 @@ int main(int argc, char **argv)
             std::cout << "SORTING ERROR IN VECTOR!!!!!!\n\n";
         //misort.printVec(); 
 		misort.resetComparisons();
-		
         long long timeDeq = populateAndSort(misort.getNumbersDeq(), argc, argv, [&]{ misort.sortDeque();}, false);
-        std::cout << "After:  ";
+        std::cout << "After  : ";
         misort.printDeq();
         std::cout << "Time to process a range of " << misort.getVecSize() << " with std::vector : " << timeVec << " µs (microseconds)" << std::endl;
         std::cout << "Time to process a range of " << misort.getDeqSize() << " with std::deque  : " << timeDeq << " µs (microseconds)" << std::endl; 
-        std::cout << "Total comparisons: " << misort.getComparisons() << std::endl;
+        // std::cout << "Total comparisons: " << misort.getComparisons() << std::endl;
         if (!std::is_sorted(misort.getNumbersDeq().begin(), misort.getNumbersDeq().end()))
             std::cout << "SORTING ERROR IN DEQUE!!!!!!\n\n";
-
     }
     catch(std::exception &e)
     {

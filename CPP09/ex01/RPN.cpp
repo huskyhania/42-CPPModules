@@ -60,7 +60,7 @@ void	doMath(std::stack<int>& numStack, char opElem)
 				throw std::overflow_error("Int overflow in division");
 			numStack.push(first / second);
 		}
-		std::cout << "Top of the stack after one operation: " << numStack.top() << std::endl;
+		//std::cout << "Top of the stack after one operation: " << numStack.top() << std::endl;
 	}
 }
 
@@ -88,14 +88,14 @@ void	reverseMe(std::string input)
 		}
 		if (stack.size() != 1)
 			throw std::runtime_error("Error: leftover operands on stack");
-		std::cout << "Stack after math operations is : " << stack.top() << std::endl;
+		std::cout << stack.top() << std::endl;
 	}
 	catch (std::runtime_error &e)
 	{
-		std::cout << e.what() << std::endl;
+		std::cerr << e.what() << std::endl;
 	}
 	catch (...)
 	{
-		std::cout << "Sth went wrong..." << std::endl;
+		std::cerr << "Sth went wrong..." << std::endl;
 	}
 }

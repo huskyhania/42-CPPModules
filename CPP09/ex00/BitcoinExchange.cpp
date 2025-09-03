@@ -92,7 +92,7 @@ void BitcoinExchange::useInput(std::ifstream& inputFile)
 		std::string valueStr;
 		if (!(iss >> date >> pipe >> valueStr))
 		{
-			std::cerr << "Error: bad input: " << line << std::endl;
+			std::cerr << "Error: bad input => " << line << std::endl;
 			continue;
 		}
 		if (pipe != "|")

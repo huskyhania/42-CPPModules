@@ -116,17 +116,6 @@ std::vector<int> PmergeMe::indexInsertionOrder(size_t pendCount)
     return order;
 }
 
-// // Convenience: return 0-based pend indices (0 = b2, 1 = b3, ...)
-// std::vector<int> PmergeMe::indexInsertionOrder(size_t pendCount) 
-// {
-//     auto bIndices = pendInsertionOrder(pendCount);
-//     std::vector<int> res;
-//     res.reserve(bIndices.size());
-//     for (int bi : bIndices) 
-//         res.push_back(bi - 2);
-//     return res;
-// }
-
 //based on Jacobsthal number, calculate the upper bound for the search
 size_t PmergeMe::jacobsthalSearchLimit(size_t pendIndex) 
 {
